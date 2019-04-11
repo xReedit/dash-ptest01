@@ -13,8 +13,12 @@ export const AppRoutes: Routes = [
         path: '',
         loadChildren: './dashboard/dashboard.module#DashboardModule',
         canActivate: [AuthGuard],
-        data : {'tituloModulo':'Inicio'}
-        }
+        data : {'tituloModulo' : 'Inicio'}
+        },
+        {
+          path: 'ventas/indicadores',
+          loadChildren: './page/ventas/ventas.module#VentasModule'
+        },
       ]
     },
     {
@@ -25,4 +29,4 @@ export const AppRoutes: Routes = [
         loadChildren: './session/session.module#SessionModule'
       }]
     }
-]
+];

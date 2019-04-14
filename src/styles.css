@@ -30,3 +30,83 @@
     animation-name: fadeIn;
 }
 
+/* c
+ard chart */
+.m-card{
+        background-color: #FEFEFE;
+        border-radius: 0.3em;
+        margin-bottom: 10px;
+        overflow: hidden;
+        position: relative;
+        text-align: left;
+}
+
+.m-card-toolbar {
+        color: #2a2a2a;
+        font-weight: 400;
+        padding: 10px 100px 0 15px;
+        position: relative;
+}
+
+.m-card-toolbar .titulo {
+        font-size: 1.2em;
+        line-height: 120%;
+}
+
+.m-card-toolbar .botones {
+        position: absolute;
+        right: 5px;
+        top: 10px;
+        z-index: 1;       
+        padding-right: 10px;
+}
+
+.m-card-toolbar .botones .btn {
+    cursor: pointer;
+    float: right;
+    padding: 0;
+    color: gray;
+}
+
+.btn-config {
+    background-position: -93px 0;
+    margin-left: 0;
+    padding: 0;
+}
+
+.m-card-body {
+    padding: 15px;
+    background-color: #FEFEFE;
+    overflow: hidden;
+    position: relative;
+}
+
+.label-title-chart {
+    font-weight: bold;
+    font-size: 1.7em;
+    line-height: 130%;
+    color: #444444;
+}
+
+.label-subtitle-chart {
+    line-height: 140%;    
+}
+
+.fsize-08 {font-size: 0.82em;}
+.fsize-07 {font-size: 0.72em;}
+
+.c-plomo-0 {
+  color: #505050;
+}
+.c-plomo-1 {
+    color: #3d3d3d;
+}
+
+.c-aaa {
+    color: #aaaaaa;
+}
+
+.border-de-dotted {
+    border-right: 1px #cccccc dotted;
+}
+/* card chart */

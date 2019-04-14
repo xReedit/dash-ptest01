@@ -1,41 +1,105 @@
 
 <!-- indicadores -->
 <div class="row">
+
   <div class="col-md-4 text-center">
-    <mat-card>
-      <h5>Meta Diaria</h5>
-      <div id="chart_m_dia"></div>
-    </mat-card>
+    <div class="m-card">
+      <div class="m-card-toolbar">
+        <div class="botones">
+          <span class="btn btn-config"> <i class="fas fa-ellipsis-v"></i></span>          
+        </div>
+        <span class="titulo">Meta Diaria</span>
+      </div>
+      <div class="m-card-body">
+        <div id="chart_m_dia"></div>
+      </div>
+    </div>
   </div>
+
   <div class="col-md-4 text-center">
-    <mat-card>
-      <h5>Meta Mensual</h5>
-      <div id="chart_m_mes"></div>
-    </mat-card>
+    <div class="m-card">
+      <div class="m-card-toolbar">
+        <div class="botones">
+          <span class="btn btn-config"> <i class="fas fa-ellipsis-v"></i></span>
+        </div>
+        <span class="titulo">Meta Mensual</span>
+      </div>
+      <div class="m-card-body">
+        <div id="chart_m_mes"></div>
+      </div>
+    </div>
   </div>
+
   <div class="col-md-4 text-center">
-    <mat-card>
-      <h5>Meta Anual</h5>
-      <div id="chart_m_yy"></div>
-    </mat-card>
+    <div class="m-card">
+      <div class="m-card-toolbar">
+        <div class="botones">
+          <span class="btn btn-config"> <i class="fas fa-ellipsis-v"></i></span>
+        </div>
+        <span class="titulo">Meta Anual</span>
+      </div>
+      <div class="m-card-body">
+        <div id="chart_m_yy"></div>
+      </div>
+    </div>
   </div>
+  
 </div>
 <!-- indicadores -->
 <br>
 <!-- utilimas semanas y ultimos meses -->
 <div class="row">
+
   <div class="col-md-6 text-center">
-    <mat-card>
-      <h5>Ultima Semana</h5>
-      <div id="chart_last_sem"></div>
-    </mat-card>
+    <div class="m-card">
+      <div class="m-card-toolbar">
+        <div class="botones">
+          <span class="btn btn-config"> <i class="fas fa-ellipsis-v"></i></span>
+        </div>
+        <span class="titulo">Como van las ventas esta semana?</span>
+      </div>
+      <div class="m-card-body">
+        <div class="row text-center">
+          <div class="col-sm-6 text-center border-de-dotted">
+            <div>
+              <div class="label-title-chart">{{total_venta_last_week_now}}</div>
+              <div class="label-subtitle-chart c-plomo-0 fsize-07">Total en ventas</div>
+              <div class="label-subtitle-chart c-plomo-0 fsize-07">{{por_venta_now_vs_last_week}}% mas que la semana pasada</div>
+            </div>
+          </div>
+          <div class="col-sm-6 text-center">
+            <div>
+              <div class="label-title-chart">5500</div>
+              <div class="label-subtitle-chart c-plomo-0 fsize-07">Pedidos atendidos</div>
+            </div>
+          </div>
+          <div class="col-sm-12 text-center">
+            <br>
+            <div class="label-subtitle-chart c-aaa fsize-08">Siendo Miercoles el dia que mas se vendio.</div>
+          </div>
+        </div>
+        <!-- grafico -->
+        <br>
+        <div id="chart_last_sem"></div>
+      </div>
+    </div>
   </div>
+
   <div class="col-md-6 text-center">
-    <mat-card>
-      <h5>Ultimos Meses</h5>
-      <div id="chart_last_meses"></div>
-    </mat-card>
+    <div class="m-card">
+      <div class="m-card-toolbar">
+        <div class="botones">
+          <span class="btn btn-config"> <i class="fas fa-ellipsis-v"></i></span>
+        </div>
+        <span class="titulo">Ultimos Meses</span>
+      </div>
+      <div class="m-card-body">
+        <br>
+        <div id="chart_last_meses"></div>
+      </div>
+    </div>
   </div>
+  
 </div>
 <!-- utilimas semanas y ultimos meses -->
 

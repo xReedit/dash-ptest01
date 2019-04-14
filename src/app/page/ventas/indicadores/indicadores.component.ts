@@ -4,6 +4,7 @@ import * as c3 from 'c3';
 import * as cf from 'crossfilter2';
 import { CrudHttpService } from 'src/app/shared/crud-http.service';
 import { UtilesService } from 'src/app/shared/services/utiles.service';
+import { TimeLocaleDefinition } from 'd3';
 
 @Component({
   selector: 'app-indicadores',
@@ -16,7 +17,13 @@ export class IndicadoresComponent implements OnInit {
   chart_meta_mes: any;
   chart_meta_yy: any;
   chart_last_sem: any;
-  
+  chart_last_meses: any;
+
+  total_venta_last_week_now = 0; // total de ventas de semana actual
+  por_venta_now_vs_last_week = 0; // porcentaje ventas esta semana VS semana pasada
+
+  format_money: any;
+
   datos_ventas = [];
   constructor(public crudService: CrudHttpService, public utilesService: UtilesService) { }
 
@@ -26,8 +33,8 @@ export class IndicadoresComponent implements OnInit {
 
   ngOnInit() {
 
-    this.xGenararGraficosGouje();
-    
+
+
 
     // const chart = c3.generate({
     //   bindto: '#chart',
@@ -39,7 +46,11 @@ export class IndicadoresComponent implements OnInit {
     //   }
     // });
 
-    const es_ES = {
+    const es_ES: TimeLocaleDefinition = {
+      'decimal': '.',
+      'thousands': ',',
+      'grouping': [3],
+      'currency': ['S/', ''],
       'dateTime': '%A, %e de %B de %Y, %X',
       'date': '%d/%m/%Y',
       'time': '%H:%M:%S',
@@ -51,8 +62,10 @@ export class IndicadoresComponent implements OnInit {
     };
 
     d3.timeFormatDefaultLocale(es_ES);
+    this.format_money = d3.format('(,.2f');
 
 
+    this.xGenararGraficosGouje();
 
     const _chart = c3.generate({
       bindto: '#chart',
@@ -62,7 +75,7 @@ export class IndicadoresComponent implements OnInit {
         columns: [
           ['x', '2019-04-08', '2019-04-09', '2019-04-10', '2019-04-11', '2019-04-12', '2019-04-13', '2019-04-14'],
           //            ['x', '20130101', '20130102', '20130103', '20130104', '20130105', '20130106'],
-          ['Semana Pasada', 30, 280, 170, 400, 150, 250, 300],
+          ['Semana Pasada', 600, 224, 170, 400, 150, 250, 300],
           ['Semana Actual', 130, 100, 150, 500]
         ],
         type: 'area-spline'
@@ -93,12 +106,15 @@ export class IndicadoresComponent implements OnInit {
       // preparamos fechas para las dimensiones
       const dateFormatSpecifier = '%d/%m/%Y';
       const dateFormatSpecifier2 = '%m-%d-%Y';
+      const dateFormatSpecifier3 = '%Y-%m-%d'; // para graficos
       const dateFormat = d3.timeFormat(dateFormatSpecifier);
       const dateFormat2 = d3.timeFormat(dateFormatSpecifier2);
+      const dateFormat3 = d3.timeFormat(dateFormatSpecifier3);
       const dateFormatParser = d3.timeParse(dateFormatSpecifier);
       const dateFormatParserMMDD = d3.timeParse('%d/%m');
       const dateFormatParserMMYY = d3.timeParse('%m/%Y');
-      const dateFormatParserWeek = d3.timeFormat('%U');
+      const dateFormatParserWeek = d3.timeFormat('%V');
+      const dateFormatParserNomDay = d3.timeFormat('%a');
       const numberFormat = d3.format('.2f');
 
       const _date = new Date();
@@ -109,12 +125,14 @@ export class IndicadoresComponent implements OnInit {
 
         d.hora = fecha_hora[1].split(':')[0]; // solo hora
         d.dd = dateFormatParser(fecha_hora[0]);
-        d.nom_dia = this.utilesService.getNomDia(d.dd.getDay());
+        d.nom_dia = dateFormatParserNomDay(d.dd);
         d.num_dia = d.dd.getDate();
         d.dd2 = dateFormat2(d.dd);
         d.num_week = dateFormatParserWeek(d.dd);
-        d.ddmm = dateFormatParserMMDD((d.dd.getDate()) + '/' + d.dd.getMonth() + 1);
+        d.dd3 = dateFormat3(d.dd);
         d.mm = d3.timeMonth(d.dd);
+        d.ddmm = d.num_dia + '/' + (parseFloat(d.dd.getMonth()) + 1);
+        d.ddmm = dateFormatParserMMDD(d.ddmm);
         d.mmyy = dateFormatParserMMYY(d.dd.getMonth() + 1 + '/' + d.dd.getFullYear());
         d.mes_yy = this.utilesService.getNomMes(d.dd.getMonth()) + '-' + d.dd.getFullYear().toString().slice(-2);
         d.nom_mes = this.utilesService.getNomMes(d.dd.getMonth());
@@ -123,7 +141,6 @@ export class IndicadoresComponent implements OnInit {
         // dia actual
         d.dd_actual = d.dd === f_actual ? true : false;
         // semana actual
-        // d.week_actual = 
         // mes actual
         d.mm_actual = d.mm === f_actual.getMonth() ? true : false;
         // año actual
@@ -145,75 +162,82 @@ export class IndicadoresComponent implements OnInit {
       const ddDimension = cf_ventas.dimension(x => x.dd);
 
       // const meta diaria
-      const meta_diaria = 320;
+      const meta_diaria = 2100;
+      const meta_mensual = 50000;
+      const meta_anual = 500000;
 
       // orden meta diaria
       function ordenbDDMeta (p: any) { return p.f; }
+
       // de los ultimos 7 dias // falta meta que debe ser mensual
       const dd_metadiaria = ddDimension.group().reduce(
         // add
-        function (p: any, v) {
-          ++p.count;
+        (p: any, v, nf) => {
+          p.count += 1 ;
           p.xtotal += parseFloat(v.total);
           p.f = v.dd;
           p.descripcion = v.nom_dia;
+          p.num_week = v.num_week;
           return p;
         },
         // remove
-        function (p: any, v) {
-          --p.count;
+        (p: any, v, nf) => {
+          p.count -= 1;
           p.xtotal -= parseFloat(v.total);
           p.f = v.dd;
           p.descripcion = v.nom_dia;
+          p.num_week = v.num_week;
           return p;
 
         },
         // init
-        function () {
-          return { f: '', count: 0, xtotal: 0, descripcion: '' };
+        () => {
+          return { count: 0, xtotal: 0, f: '', descripcion: '', num_week: 0 };
         }
-      ).order(ordenbDDMeta).top(7);
+      ).order(ordenbDDMeta).top(20);
 
       let numLastWeek = 0;
       // grafico meta diaria
       dd_metadiaria.slice(0, 3).map((x: any, index: number) => {
         if ( index === 0 ) {numLastWeek = x.value.num_week; }
-        x.value.porcentaje = Math.round(((x.value.xtotal / 320) * 100)).toFixed(0);
+        x.value.porcentaje = Math.round(((x.value.xtotal / meta_diaria) * 100)).toFixed(0);
         const dataAdd = [x.value.descripcion, x.value.porcentaje];
         this.chart_meta_dia.load({
           columns: [dataAdd]
         });
       });
 
+      console.log(dd_metadiaria);
 
-      const data_last_sem = dd_metadiaria.filter((x: any) => x.value.num_week === numLastWeek).map( (x: any) => {
-        return { 'date': x.key, 'value': x.value.xtotal };
-      });
+      const data_last_sem = dd_metadiaria.filter((x: any) => x.value.num_week === numLastWeek);
+      const _total_venta_last_week_now = data_last_sem.map(a => a.value.xtotal).reduce((a, b) => a + b);
+      this.total_venta_last_week_now = this.format_money(Math.round(_total_venta_last_week_now));
+
+      const numLastWeek2 = numLastWeek - 1 < 0 ? 0 : numLastWeek - 1;
+      const data_last_sem_last = dd_metadiaria.filter((x: any) => x.value.num_week === numLastWeek);
+      const _total_venta_last_now_last = data_last_sem_last.map(a => a.value.xtotal).reduce((a, b) => a + b);
+
+      // calc => 500 / 800  => 0.62 * 100 => 62% - 100% = -37 (falta para llegar a las ventas de la semana pasada)
+      this.por_venta_now_vs_last_week = Math.round(((_total_venta_last_week_now / _total_venta_last_now_last) * 100)) - 100;
+
+      // this.prom_venta_last_week = this.format_money(Math.round(total_venta_last_week));
+      // console.log(this.prom_venta_last_week);
+      // const data_last_sem = dd_metadiaria.slice(0, 4).map((x: any ) => x);
 
       // grafico ultima semana
+      const _columns_x = ('x' + ',' + data_last_sem.map((x: any) => dateFormat3(x.key)).join(',')).split(',');
+      const _values_x = ('Semana Actual' + ',' + data_last_sem.map((x: any) => x.value.xtotal).join(',')).split(',');
       this.chart_last_sem.load({
-        json: [data_last_sem],
-        keys: {
-          x: 'date',
-          value: ['value'],
-        },
-        axis: {
-          x: {
-            type: 'timeseries',
-            tick: {
-              format: '%a'
-            }
-          }
-        }
+        columns: [
+          // ['x', data_last_sem.map((x: any) => x.key).join(',')],
+          // ['Semana Actual', data_last_sem.map((x: any) => x.value.xtotal).join(',')]
+          // ['x', '2019-04-08', '2019-04-09', '2019-04-10', '2019-04-11', '2019-04-12', '2019-04-13', '2019-04-14'],
+          _columns_x,
+          _values_x
+        ]
       });
-      // META diaria
-      this.chart_last_sem.ygrids.add({ value: 320, text: 'META DIARIA 320' });
 
-      setTimeout(() => {
-        this.chart_last_sem.flow();
-      }, 100);
-
-      console.log(dd_metadiaria);
+      this.chart_last_sem.ygrids.add({ value: meta_diaria, text: 'META ' + meta_diaria });
 
       // meta mensual
 
@@ -222,7 +246,7 @@ export class IndicadoresComponent implements OnInit {
       // de los ultimos 12 meses // falta meta que debe ser mensual
       const dd_metaMensual = mmDimension.group().reduce(
         // add
-        function (p: any, v) {
+        (p: any, v) => {
           ++p.count;
           p.xtotal += parseFloat(v.total);
           p.f = v.mm;
@@ -230,7 +254,7 @@ export class IndicadoresComponent implements OnInit {
           return p;
         },
         // remove
-        function (p: any, v) {
+        (p: any, v) => {
           --p.count;
           p.xtotal -= parseFloat(v.total);
           p.f = v.mm;
@@ -239,7 +263,7 @@ export class IndicadoresComponent implements OnInit {
 
         },
         // init
-        function () {
+        () => {
           return { f: '', count: 0, xtotal: 0, descripcion: '' };
         }
       ).order(ordenMMMeta).top(12);
@@ -248,17 +272,32 @@ export class IndicadoresComponent implements OnInit {
 
       // grafico meta mensual
       dd_metaMensual.slice(0, 3).map((x: any) => {
-        x.value.porcentaje = Math.round(((x.value.xtotal / 3000) * 100)).toFixed(0);
+        x.value.porcentaje = Math.round(((x.value.xtotal / meta_mensual) * 100)).toFixed(0);
         const dataAdd = [x.value.descripcion, x.value.porcentaje];
         this.chart_meta_mes.load({
           columns: [dataAdd]
         });
       });
 
+      // graficos ultimos meses
+      const _columns_mm_x = ('x' + ',' + dd_metaMensual.map((x: any) => dateFormat3(x.key)).join(',')).split(',');
+      const _values_mm_x = ('Meses' + ',' + dd_metaMensual.map((x: any) => x.value.xtotal).join(',')).split(',');
+      this.chart_last_meses.load({
+        columns: [
+          // ['x', data_last_sem.map((x: any) => x.key).join(',')],
+          // ['Semana Actual', data_last_sem.map((x: any) => x.value.xtotal).join(',')]
+          // ['x', '2019-04-08', '2019-04-09', '2019-04-10', '2019-04-11', '2019-04-12', '2019-04-13', '2019-04-14'],
+          _columns_mm_x,
+          _values_mm_x
+        ],
+      });
+      this.chart_last_meses.ygrids.add({ value: meta_mensual, text: 'META ' + meta_mensual });
+
+
       // de los ultimos 3 años // falta meta que debe ser mensual
       const dd_metaAnual = yyDimension.group().reduce(
         // add
-        function (p: any, v) {
+        (p: any, v) => {
           ++p.count;
           p.xtotal += parseFloat(v.total);
           p.f = v.yy;
@@ -266,7 +305,7 @@ export class IndicadoresComponent implements OnInit {
           return p;
         },
         // remove
-        function (p: any, v) {
+        (p: any, v) => {
           --p.count;
           p.xtotal -= parseFloat(v.total);
           p.f = v.yy;
@@ -275,7 +314,7 @@ export class IndicadoresComponent implements OnInit {
 
         },
         // init
-        function () {
+        () => {
           return { f: '', count: 0, xtotal: 0, descripcion: '' };
         }
       ).order(ordenMMMeta).top(3);
@@ -284,7 +323,7 @@ export class IndicadoresComponent implements OnInit {
 
       // grafico meta mensual
       dd_metaAnual.map((x: any) => {
-        x.value.porcentaje = Math.round(((x.value.xtotal / 4000) * 100)).toFixed(0);
+        x.value.porcentaje = Math.round(((x.value.xtotal / meta_anual) * 100)).toFixed(0);
         const dataAdd = [x.value.descripcion, x.value.porcentaje];
         this.chart_meta_yy.load({
           columns: [dataAdd]
@@ -303,7 +342,8 @@ export class IndicadoresComponent implements OnInit {
     this.chart_meta_dia = this.plantillaGraficoGauge('chart_m_dia');
     this.chart_meta_mes = this.plantillaGraficoGauge('chart_m_mes');
     this.chart_meta_yy = this.plantillaGraficoGauge('chart_m_yy');
-    this.chart_last_sem = this.plantillaGraficoLine('chart_last_sem');
+    this.chart_last_sem = this.plantillaGraficoLineYFalse('chart_last_sem', 'area-spline', '%a');
+    this.chart_last_meses = this.plantillaGraficoLineYFalse('chart_last_meses', 'bar', '%b');
   }
 
   plantillaGraficoGauge(div: string) {
@@ -339,9 +379,13 @@ export class IndicadoresComponent implements OnInit {
     });
   }
 
-  plantillaGraficoLine(div: string) {
+  plantillaGraficoLineYFalse(div: string, _type: string = 'area-spline', _format: string = '%a') {
+
     return c3.generate({
       bindto: '#' + div,
+      size: {
+        height: 125,
+      }
       data: {
         x: 'x',
         // columns: [
@@ -349,25 +393,22 @@ export class IndicadoresComponent implements OnInit {
         //   ['Semana Pasada', 30, 280, 170, 400, 150, 250, 300],
         //   ['Semana Actual', 130, 100, 150, 500]
         // ],
-        json: [],
-        // keys: {
-        //   x: 'date',
-        //   value: ['value'],
-        // },
-        type: 'area-spline'
-      },
-      grid: {
-        y: {
-          // lines: [{ value: 0, class: 'grid800', text: 'META 320' }]
-        }
+        columns: [],
+        type: _type
       },
       axis: {
         x: {
           type: 'timeseries',
           tick: {
-            format: '%a'
+            format: _format
           }
+        },
+        y: {
+            show: false
         }
+      },
+      legend: {
+        show: false
       }
     });
   }

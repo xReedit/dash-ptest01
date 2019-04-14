@@ -42,6 +42,8 @@
   }
 
   .contenedor-master {
+    background-color: #e6e6e8;
+    flex: 1 1 auto;
     margin-top: 58px;    
     /* height: calc(100vh - 58px); */
     overflow: auto;    

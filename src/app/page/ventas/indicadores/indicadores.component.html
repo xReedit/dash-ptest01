@@ -64,12 +64,18 @@
             <div>
               <div class="label-title-chart">{{total_venta_last_week_now}}</div>
               <div class="label-subtitle-chart c-plomo-0 fsize-07">Total en ventas</div>
-              <div class="label-subtitle-chart c-plomo-0 fsize-07">{{por_venta_now_vs_last_week}}% mas que la semana pasada</div>
+              <div class="label-subtitle-chart c-plomo-0 fsize-07">
+                <span class="font-weight-bold" [ngClass]="por_signo_week_now === 0 ? 'text-success' : 'text-danger'">{{por_venta_now_vs_previus_week}}%</span>
+                <span class="font-weight-bold"> {{dif_venta_now_vs_previus_week}}</span> 
+                <span class="font-weight-bold text-success" [hidden]="por_signo_week_now === 1"> mas</span>
+                <span class="font-weight-bold text-danger" [hidden]="por_signo_week_now === 0"> menos</span> 
+                que la semana pasada
+              </div>
             </div>
           </div>
           <div class="col-sm-6 text-center">
             <div>
-              <div class="label-title-chart">5500</div>
+              <div class="label-title-chart">{{count_pedidos_last_week_now}}</div>
               <div class="label-subtitle-chart c-plomo-0 fsize-07">Pedidos atendidos</div>
             </div>
           </div>

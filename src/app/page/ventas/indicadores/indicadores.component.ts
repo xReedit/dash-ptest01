@@ -20,7 +20,11 @@ export class IndicadoresComponent implements OnInit {
   chart_last_meses: any;
 
   total_venta_last_week_now = 0; // total de ventas de semana actual
-  por_venta_now_vs_last_week = 0; // porcentaje ventas esta semana VS semana pasada
+  total_venta_last_week_previus = 0; // total de ventas de semana pasada
+  count_pedidos_last_week_now = 0; // cantidad de pedidos
+  por_signo_week_now = 0; // signo del porcentaje 0 = + 1 = -;
+  por_venta_now_vs_previus_week = 0; // porcentaje ventas esta semana VS semana pasada
+  dif_venta_now_vs_previus_week = 0; // diferencia ventas esta semana VS semana pasada
 
   format_money: any;
 
@@ -47,10 +51,6 @@ export class IndicadoresComponent implements OnInit {
     // });
 
     const es_ES: TimeLocaleDefinition = {
-      'decimal': '.',
-      'thousands': ',',
-      'grouping': [3],
-      'currency': ['S/', ''],
       'dateTime': '%A, %e de %B de %Y, %X',
       'date': '%d/%m/%Y',
       'time': '%H:%M:%S',
@@ -208,17 +208,44 @@ export class IndicadoresComponent implements OnInit {
       });
 
       console.log(dd_metadiaria);
+      console.log('ultima semana: ', numLastWeek);
 
-      const data_last_sem = dd_metadiaria.filter((x: any) => x.value.num_week === numLastWeek);
-      const _total_venta_last_week_now = data_last_sem.map(a => a.value.xtotal).reduce((a, b) => a + b);
-      this.total_venta_last_week_now = this.format_money(Math.round(_total_venta_last_week_now));
+      // semana actual
+      numLastWeek = numLastWeek - 1;
+      const data_last_sem = dd_metadiaria.filter((x: any) => x.value.num_week == numLastWeek);
+      const _data_venta_last_week_now = data_last_sem.reduce((a: any, b: any) => {
+        a['total'] = a['total'] ? a['total'] : a.value.xtotal;
+        a['total'] += b.value.xtotal;
 
+        a['count'] = a['count'] ? a['count'] : a.value.count;
+        a['count'] += b.value.count;
+        return a;
+      });
+
+      const _total_venta_last_week_now = _data_venta_last_week_now['total'];
+      this.count_pedidos_last_week_now = _data_venta_last_week_now['count'];
+
+      // semana previa (pasada)
       const numLastWeek2 = numLastWeek - 1 < 0 ? 0 : numLastWeek - 1;
-      const data_last_sem_last = dd_metadiaria.filter((x: any) => x.value.num_week === numLastWeek);
-      const _total_venta_last_now_last = data_last_sem_last.map(a => a.value.xtotal).reduce((a, b) => a + b);
+      const data_last_sem_last = dd_metadiaria.filter((x: any) => x.value.num_week == numLastWeek2);
+      const _data_venta_last_now_previus = data_last_sem_last.reduce((a: any, b: any) => {
+        a['total'] = a['total'] ? a['total'] : a.value.xtotal;
+        a['total'] += b.value.xtotal ;
+
+        a['count'] = a['count'] ? a['count'] : a.value.count;
+        a['count'] += b.value.count;
+        return a;
+      });
+
+      const _total_venta_last_week_previus = _data_venta_last_now_previus['total'];
 
       // calc => 500 / 800  => 0.62 * 100 => 62% - 100% = -37 (falta para llegar a las ventas de la semana pasada)
-      this.por_venta_now_vs_last_week = Math.round(((_total_venta_last_week_now / _total_venta_last_now_last) * 100)) - 100;
+      this.total_venta_last_week_now = this.format_money(Math.round(_total_venta_last_week_now));
+      this.total_venta_last_week_previus = this.format_money(Math.round(_total_venta_last_week_previus));
+      this.por_venta_now_vs_previus_week = Math.round(((_total_venta_last_week_now / _total_venta_last_week_previus) * 100)) - 100;
+      this.dif_venta_now_vs_previus_week = this.format_money(_total_venta_last_week_now - _total_venta_last_week_previus);
+      this.por_signo_week_now = this.por_venta_now_vs_previus_week > 0 ? 0 : 1;
+
 
       // this.prom_venta_last_week = this.format_money(Math.round(total_venta_last_week));
       // console.log(this.prom_venta_last_week);
@@ -385,7 +412,7 @@ export class IndicadoresComponent implements OnInit {
       bindto: '#' + div,
       size: {
         height: 125,
-      }
+      },
       data: {
         x: 'x',
         // columns: [

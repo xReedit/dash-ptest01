@@ -88,6 +88,13 @@ ard chart */
     color: #444444;
 }
 
+.label-title-chart-sm {
+    font-weight: bold;
+    font-size: 1.2em;
+    line-height: 130%;
+    color: #444444;
+}
+
 .label-subtitle-chart {
     line-height: 140%;    
 }

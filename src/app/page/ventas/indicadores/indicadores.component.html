@@ -81,26 +81,54 @@
           </div>
           <div class="col-sm-12 text-center">
             <br>
-            <div class="label-subtitle-chart c-aaa fsize-08">Siendo Miercoles el dia que mas se vendio.</div>
+            <div *ngIf="dia_week_mas_venta!=''" class="label-subtitle-chart c-aaa fsize-08">{{dia_week_mas_venta}}</div>     
+            <div *ngIf="dias_paso_meta_week!=''" class="label-subtitle-chart c-aaa fsize-08">{{dias_paso_meta_week}}</div>
           </div>
         </div>
-        <!-- grafico -->
-        <br>
+        <!-- grafico -->        
         <div id="chart_last_sem"></div>
       </div>
     </div>
   </div>
 
+  <!-- meses -->
   <div class="col-md-6 text-center">
     <div class="m-card">
       <div class="m-card-toolbar">
         <div class="botones">
           <span class="btn btn-config"> <i class="fas fa-ellipsis-v"></i></span>
         </div>
-        <span class="titulo">Ultimos Meses</span>
+        <span class="titulo">Como van las ventas en este mes?</span>
       </div>
       <div class="m-card-body">
-        <br>
+        <div class="row text-center">
+          <div class="col-sm-6 text-center border-de-dotted">
+            <div>
+              <div class="label-title-chart">{{total_venta_last_mes_now}}</div>
+              <div class="label-subtitle-chart c-plomo-0 fsize-07">Total en ventas</div>
+              <div class="label-subtitle-chart c-plomo-0 fsize-07">
+                <span class="font-weight-bold"
+                  [ngClass]="por_signo_mes_now === 0 ? 'text-success' : 'text-danger'">{{por_venta_now_vs_previus_mes}}%</span>
+                <span class="font-weight-bold"> {{dif_venta_now_vs_previus_mes}}</span>
+                <span class="font-weight-bold text-success" [hidden]="por_signo_mes_now === 1"> mas</span>
+                <span class="font-weight-bold text-danger" [hidden]="por_signo_mes_now === 0"> menos</span>
+                que el mes pasado.
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6 text-center">
+            <div>
+              <div class="label-title-chart">{{count_pedidos_last_mes_now}}</div>
+              <div class="label-subtitle-chart c-plomo-0 fsize-07">Pedidos atendidos</div>
+            </div>
+          </div>
+          <div class="col-sm-12 text-center">
+            <br>
+            <div *ngIf="dia_week_mas_venta!=''" class="label-subtitle-chart c-aaa fsize-08">{{mes_mas_venta}}</div>
+            <div *ngIf="dias_paso_meta_week!=''" class="label-subtitle-chart c-aaa fsize-08">{{mes_paso_meta_mes}}</div>
+          </div>
+        </div>
+        <!-- grafico -->
         <div id="chart_last_meses"></div>
       </div>
     </div>
@@ -108,8 +136,38 @@
   
 </div>
 <!-- utilimas semanas y ultimos meses -->
-
 <br>
+<div class="row">
+  <div class="col-md-12">
+    <div class="m-card">
+      <div class="m-card-toolbar">
+        <div class="botones">
+          <span class="btn btn-config"> <i class="fas fa-ellipsis-v"></i></span>
+        </div>
+        <span class="titulo">Que hora hay mas afluencia de clientes?</span>
+      </div>
+      <div class="m-card-body">
+        <div class="row text-center">
+          <div class="col-sm-6 text-center border-de-dotted">
+            <div>
+              <div class="label-title-chart-sm">{{horas_punta}}</div>
+              <div class="label-subtitle-chart c-plomo-0 fsize-07">Horas punta</div>
+            </div>
+          </div>
+          <div class="col-sm-6 text-center">
+            <div>
+              <div class="label-title-chart-sm">{{horas_libres}}</div>
+              <div class="label-subtitle-chart c-plomo-0 fsize-07">Horas mas libres</div>
+            </div>
+          </div>          
+        </div>
+        <!-- grafico -->
+        <div id="chart_hora_punta"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <mat-card>
 <div id="chart"></div>
 </mat-card>

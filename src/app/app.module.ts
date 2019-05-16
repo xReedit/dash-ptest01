@@ -19,7 +19,7 @@ import { AdminLayoutComponent } from './core/admin-layout/admin-layout.component
 import { AuthLayoutComponent } from './core/auth-layout/auth-layout.component';
 import { HeaderTollbarComponent } from './core/header-tollbar/header-tollbar.component';
 import { SiderbarComponent } from './core/siderbar/siderbar.component';
-// import { IndicadoresComponent } from './page/ventas/indicadores/indicadores.component';
+import { BreadcrumbComponent } from './core/breadcrumb/breadcrumb.component';
 
 
 
@@ -30,7 +30,7 @@ import { SiderbarComponent } from './core/siderbar/siderbar.component';
     AuthLayoutComponent,
     HeaderTollbarComponent,
     SiderbarComponent,
-    // IndicadoresComponent,
+    BreadcrumbComponent,
   ],
   imports: [
     BrowserModule,

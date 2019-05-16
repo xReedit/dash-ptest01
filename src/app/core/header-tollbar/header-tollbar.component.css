@@ -4,6 +4,17 @@
     background-color: rgb(63, 81, 181);
     box-shadow: rgba(0, 0, 0, 0.35) 0px 1px 2px;
     transition: all 0.2s ease-in-out 0s;
-    position: fixed;    
+    /* position: fixed;     */
     overflow: hidden;
+  }
+
+  .example-fill-remaining-space {
+    /* This fills the remaining space, by using flexbox. 
+     Every toolbar row uses a flexbox row layout. */
+    flex: 1 1 auto;
+  }
+
+  .titutlo_toolbar {
+      font-size: 15px;
+      display: block;
   }

@@ -117,3 +117,19 @@ ard chart */
     border-right: 1px #cccccc dotted;
 }
 /* card chart */
+
+table .table_sm {
+    width: 100% !important;
+}
+
+.table_sm thead tr {
+  height: 32px;
+}
+
+.table_sm tbody tr {
+    height: 28px;
+}
+
+.table_sm tbody tr td {
+  font-size: 0.7em;
+}

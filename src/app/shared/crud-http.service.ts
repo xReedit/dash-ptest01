@@ -19,6 +19,12 @@ export class CrudHttpService {
     return this.httpClient.get<any[]>(url, { headers: header });
   }
 
+  getTimeNow(): Observable<any[]> {
+    const url = this.setUrlFiltros('estadistica', 'getFechaNow', false, false);
+    const header = null;
+    return this.httpClient.get<any[]>(url, { headers: header });
+  }
+
   // numeropagina: numero pagina a mostrar
   // rows: cantidad de filas o registros a mostrar
   // filter: filtros de busqueda para la paginacion // se adjunta a org y sede

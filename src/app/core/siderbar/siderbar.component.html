@@ -4,10 +4,10 @@
 </mat-toolbar-row>        
 <div class="wrapper">
     <nav id="sidebar">
-        <div class="sidebar-header text-center">
+        <!-- <div class="sidebar-header text-center">
             <h3>Zara</h3>
             <span>moyobamba</span>
-        </div>
+        </div> -->
         <hr>
         <mat-nav-list class="list-unstyled components">
             <div class="item">
@@ -22,18 +22,24 @@
                 <mat-list-item href="#pageSubmenu" data-toggle="collapse" aria-expanded="false">
                         <a  href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
                             <i class="fas fa-copy"></i>
-                            Almacen
+                            Ventas
                         </a>                                    
                 </mat-list-item>
                 <mat-list class="collapse list-unstyled" id="pageSubmenu">
-                        <mat-list-item>
-                            <a href="#">Registrar de productos</a>
+                        <mat-list-item [routerLink]="[ '/ventas']">
+                            <a>Indicadores Globales</a>
                         </mat-list-item>
-                        <mat-list-item>
-                            <a href="#">Transferencias de mercaderia</a>
+                        <mat-list-item [routerLink]="[ '/ventas/consumo']">
+                          <a>Consumo</a>
                         </mat-list-item>
-                        <mat-list-item>
-                            <a href="#">Almacenes</a>
+                        <mat-list-item [routerLink]="[ '/ventas/clientes']">
+                            <a>Clientes</a>
+                        </mat-list-item>
+                        <mat-list-item [routerLink]="[ '/ventas/colaboradores']">
+                            <a>Colaboradores</a>
+                        </mat-list-item>
+                        <mat-list-item [routerLink]="[ '/ventas/comparativa']">
+                          <a>Comparativa</a>
                         </mat-list-item>
                 </mat-list>      
             </div>        

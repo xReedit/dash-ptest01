@@ -77,4 +77,17 @@ export class UtilesService {
 
     return form;
   }
+
+  ReduceGroupBy = function (xs: any, key: string) {
+    return xs.reduce(function (rv, x) {
+      (rv[x[key]] = rv[x[key]] || []).push(x);
+      return rv;
+    }, {});
+  };
+
+  ReduceGroupAndSum = function (xs: any, key: string) {
+    return Object.values(xs.reduce((r: any, o: any) => (r[o[key]]
+      ? (r[o[key]].count += o.count)
+      : (r[o[key]] = { ...o }), r), {}));
+  };
 }

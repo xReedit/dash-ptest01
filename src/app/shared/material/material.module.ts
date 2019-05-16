@@ -5,20 +5,31 @@ import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-
+import { MatTableModule } from '@angular/material/table';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatSortModule } from '@angular/material/sort';
+import { MatTabsModule } from '@angular/material/tabs';
 
 @NgModule({
   imports: [
     CommonModule,
     MatCardModule,
     MatIconModule,
-    MatInputModule
+    MatInputModule,
+    MatSortModule,
+    MatPaginatorModule,
+    MatTableModule,
+    MatTabsModule,
   ],
 
   exports: [
     MatCardModule,
     MatIconModule,
-    MatInputModule
+    MatInputModule,
+    MatSortModule,
+    MatPaginatorModule,
+    MatTableModule,
+    MatTabsModule,
   ],
 
   declarations: []

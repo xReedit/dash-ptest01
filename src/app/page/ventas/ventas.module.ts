@@ -5,6 +5,11 @@ import { HttpClientModule } from '@angular/common/http';
 
 import { IndicadoresComponent } from './indicadores/indicadores.component';
 import { VentasRoutingModule } from './ventas.routing';
+import { ClientesComponent } from './clientes/clientes.component';
+import { MainComponent } from './main/main.component';
+import { ColaboradoresComponent } from './colaboradores/colaboradores.component';
+import { ComparativaComponent } from './comparativa/comparativa.component';
+import { ConsumoComponent } from './consumo/consumo.component';
 
 @NgModule({
   imports: [
@@ -14,7 +19,12 @@ import { VentasRoutingModule } from './ventas.routing';
     VentasRoutingModule
   ],
   declarations: [
-    IndicadoresComponent
+    IndicadoresComponent,
+    ClientesComponent,
+    MainComponent,
+    ColaboradoresComponent,
+    ComparativaComponent,
+    ConsumoComponent
   ]
 })
 export class VentasModule { }

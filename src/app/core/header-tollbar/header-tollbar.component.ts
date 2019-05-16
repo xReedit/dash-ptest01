@@ -1,5 +1,6 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 
+
 @Component({
   selector: 'app-header-tollbar',
   templateUrl: './header-tollbar.component.html',
@@ -12,7 +13,7 @@ export class HeaderTollbarComponent implements OnInit {
   ngOnInit() {
   }
 
-  showDrawer(){
+  showDrawer() {
     this._click_btn_bar.emit(true);
   }
 

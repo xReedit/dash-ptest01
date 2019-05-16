@@ -16,9 +16,10 @@ export const AppRoutes: Routes = [
         data : {'tituloModulo' : 'Inicio'}
         },
         {
-          path: 'ventas/indicadores',
-          loadChildren: './page/ventas/ventas.module#VentasModule'
-        },
+          path: 'ventas',
+          loadChildren: './page/ventas/ventas.module#VentasModule',
+          data: { 'tituloModulo': 'Ventas:'  }
+        }
       ]
     },
     {

@@ -1,4 +1,5 @@
 import { Component, OnInit, ElementRef } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-siderbar',
@@ -7,13 +8,17 @@ import { Component, OnInit, ElementRef } from '@angular/core';
 })
 export class SiderbarComponent implements OnInit {
 
-  constructor() { }
+  constructor(public router: Router, route: ActivatedRoute) { }
 
   ngOnInit() {
   }
 
-  toggle(el:ElementRef) {
+  toggle(el: ElementRef) {
     el.nativeElement.toggle();
+  }
+
+  irVentasClientes() {
+    this.router.navigate(['/clientes-consumo']);
   }
 
 }

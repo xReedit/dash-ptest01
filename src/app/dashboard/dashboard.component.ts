@@ -14,7 +14,7 @@ export class DashboardComponent implements OnInit {
   }
 
   irIndicadores() {
-    this.router.navigate(['ventas/indicadores']);
+    this.router.navigate(['ventas']);
   }
 
 }

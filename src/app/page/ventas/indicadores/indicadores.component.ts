@@ -1,11 +1,11 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import * as d3 from 'd3';
-import * as c3 from 'c3';
+// import * as c3 from 'c3';
 import * as cf from 'crossfilter2';
 import { CrudHttpService } from 'src/app/shared/crud-http.service';
 import { UtilesService } from 'src/app/shared/services/utiles.service';
 import { PlantillaGraficosService } from 'src/app/shared/services/plantilla-graficos.service';
-import { TimeLocaleDefinition } from 'd3';
+// import { TimeLocaleDefinition } from 'd3';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';

@@ -50,6 +50,7 @@ export class D3FormatLocalService {
     const dateFormatParserHora24 = d3.timeFormat('%H');
     const dateFormatParserHora12 = d3.timeFormat('%I %p');
     const dateFormatParserNumMes = d3.timeFormat('%m');
+    const dateFormatParserNumDiaSemana = d3.timeFormat('%w');
 
     return data.map((d: any) => {
       const fecha_hora = d[nom_campo].split(' ');
@@ -66,6 +67,7 @@ export class D3FormatLocalService {
       d.dd = dateFormatParser(fecha_hora[0]);
       d.nom_dia = dateFormatParserNomDay(d.dd);
       d.num_dia = d.dd.getDate();
+      d.num_dia_semana = dateFormatParserNumDiaSemana(d.dd);
       d.dd2 = dateFormat2(d.dd);
       d.num_week = dateFormatParserWeek(d.dd);
       d.dd3 = dateFormat3(d.dd);

@@ -8,26 +8,32 @@
       <div class="col-md-6">
         <div class="text-center m-5">
           <img src="../assets/images/papaya_text.png" width="200px">
-          <h3>Transactor</h3>
-          <p>Hola, bienvenido(a), ingrese sus credenciales:</p>
+          <h3>Modulo Gerencial</h3><span class="text-info">En desarrollo.</span>
+          <p class="fs-14">Hola, bienvenido(a), ingrese sus credenciales:</p>
           <hr>
 
-          <form action="">
+          <form (ngSubmit)="logear()">
             <div class="row ">
               <div class="col-sm-6">
                   <mat-form-field class="w-100">
-                    <input matInput placeholder="Usuario">
+                    <input matInput placeholder="Usuario"[(ngModel)]="usuario.nomusuario" name="nomusuario">
                   </mat-form-field>
               </div>
               <div class="col-sm-6">
                   <mat-form-field class="w-100">
-                    <input matInput type="password" placeholder="Clave" (keyup.enter)="logear()">
+                    <input matInput type="password" [(ngModel)]="usuario.pass" name="pass" placeholder="Clave">
                   </mat-form-field>
               </div>
             </div>
-            <hr>
+            
             <div class="text-center">
-              <button mat-flat-button (click)="logear()">Listo, Ingresar</button>
+              <mat-progress-bar [hidden]="!loading" mode="indeterminate"></mat-progress-bar>
+              <span class="fs-14 font-weight-bold text-danger animated flash" [hidden]="!msjErr">Credenciales Incorrectas.</span>
+            </div>
+            
+            <hr>
+            <div class="text-center">              
+              <button mat-flat-button>Listo, Ingresar</button>
             </div>
           </form>
 

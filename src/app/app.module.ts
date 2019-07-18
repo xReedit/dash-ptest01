@@ -1,6 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { HttpClientModule, HttpClient } from '@angular/common/http';
 import { CrudHttpService } from './shared/crud-http.service';
@@ -10,6 +11,7 @@ import {MatSidenavModule} from '@angular/material/sidenav';
 import {MatButtonModule} from '@angular/material/button';
 import {MatListModule} from '@angular/material/list';
 import {MatIconModule} from '@angular/material/icon';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 
 
 import { AppRoutes } from './app.routing';
@@ -23,6 +25,7 @@ import { BreadcrumbComponent } from './core/breadcrumb/breadcrumb.component';
 
 
 
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -30,11 +33,12 @@ import { BreadcrumbComponent } from './core/breadcrumb/breadcrumb.component';
     AuthLayoutComponent,
     HeaderTollbarComponent,
     SiderbarComponent,
-    BreadcrumbComponent,
+    BreadcrumbComponent
   ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
+    FormsModule,
     RouterModule.forRoot(AppRoutes),
     HttpClientModule,
 
@@ -42,7 +46,8 @@ import { BreadcrumbComponent } from './core/breadcrumb/breadcrumb.component';
     MatSidenavModule,
     MatButtonModule,
     MatListModule,
-    MatIconModule
+    MatIconModule,
+    MatProgressBarModule
 
   ],
   providers: [CrudHttpService],

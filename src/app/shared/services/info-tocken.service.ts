@@ -9,7 +9,7 @@ export class InfoTockenService {
   constructor( ) { }
 
   saveToken(token: any) {
-    localStorage.setItem('wt::tk', token);
+    localStorage.setItem('::token', token);
   }
 
   getInfoSedeToken(): string {
@@ -20,5 +20,5 @@ export class InfoTockenService {
     return '1';
   }
 
-  getToken(): any { return localStorage.getItem('wt::tk'); }
+  getToken(): any { return localStorage.getItem('::token'); }
 }

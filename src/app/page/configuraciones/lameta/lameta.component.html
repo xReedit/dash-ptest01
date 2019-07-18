@@ -1,0 +1,53 @@
+<div class="animated fadeIn">  
+  <div class="m-card">
+    <div class="m-card-toolbar">      
+      <span class="titulo">Establecer metas de venta</span><br>
+      <span class="text-secondary fs-14">El crecimiento de tu negocio depende de los resultados que logras y esto tiene
+        que ver con las metas de ventas. La clave está en una planificación en la que debes definir los objetivos que
+        quieres alcanzar o, mejor aún, superar.</span>
+    </div>
+    <hr>
+    <div class="m-card-body">
+      <form #metaForm="ngForm" novalidate="">
+      <div class="row">
+        <div class="col-md-10">          
+          <div class="row">
+            <div class="col-md-4">
+              <!-- meta diaria -->
+              <mat-form-field class="w-100">
+                <input matInput placeholder="Meta Diaria"
+                type="number" 
+                [(ngModel)]="meta.diaria"  name="diaria"
+                (keyup)="calcMeta()"
+                required
+                >
+              </mat-form-field>
+            </div>
+            <div class="col-md-4">
+              <!-- meta mensual -->
+              <mat-form-field class="w-100">
+                <input matInput type="number" placeholder="Meta Mensual" [(ngModel)]="meta.mensual" name="mensual"
+                  required>
+              </mat-form-field>
+            </div>
+            <div class="col-md-4">
+              <!-- meta year -->
+              <mat-form-field class="w-100">
+                <input matInput type="number" placeholder="Meta Anual" [(ngModel)]="meta.anual" name="anual" required>
+              </mat-form-field>
+            </div>
+          </div>                  
+        </div>
+        <div class="col-md-2">
+          <img src="assets/images/lameta.png" alt="">
+        </div>
+      </div>
+      <hr>
+
+      <div>
+        <button mat-flat-button (click)="guardar()" [disabled]="!metaForm.form.valid">Listo, Guardar</button>
+      </div>
+      </form>
+    </div>
+  </div>
+</div>

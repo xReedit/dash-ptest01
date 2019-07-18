@@ -1,46 +1,61 @@
-import { Component, OnInit, ViewChild, HostListener, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, HostListener, ElementRef, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
 import { MatDrawer } from '@angular/material/sidenav';
+import { ProgressLoadingService } from 'src/app/shared/services/progress-loading.service';
+import { Subscription } from 'rxjs/internal/Subscription';
+import { delay } from 'rxjs/internal/operators/delay';
 
 @Component({
   selector: 'app-admin-layout',
   templateUrl: './admin-layout.component.html',
   styleUrls: ['./admin-layout.component.css']
 })
-export class AdminLayoutComponent implements OnInit {
+export class AdminLayoutComponent implements OnInit, OnDestroy {
 
   showFiller = false;
   isScreenAll = true; // si screen > 990
-  mode: string = "side"
-  
-  @ViewChild('drawer') drawer:MatDrawer;
+  isLoading = false;
+  mode = 'side';
+
+  private isProgreesBar: Subscription = null;
+
+  @ViewChild('drawer') drawer: MatDrawer;
 
   @ViewChild('container') container: HTMLElement;
 
-  constructor() { }
+  constructor(public progressLoadingService: ProgressLoadingService) { }
 
   ngOnInit() {
     this.drawer.toggle();
-    if (window.innerWidth< 990) {
+    if (window.innerWidth < 990) {
       this.meSizeScreen();
     } else {
       this.maSizeScreen();
     }
+
+    this.isProgreesBar = this.progressLoadingService.isSeeProgress$
+    .subscribe((res) => {
+      this.isLoading = res;
+    });
   }
 
-  showDrawer(): void {    
-    this.mode = this.isScreenAll ? "side" : "over";          
+  ngOnDestroy() {
+    this.isProgreesBar.unsubscribe();
+  }
+
+  showDrawer(): void {
+    this.mode = this.isScreenAll ? 'side' : 'over';
     this.drawer.toggle();
   }
 
-  private meSizeScreen(): void{
+  private meSizeScreen(): void {
     this.isScreenAll = false;
-    this.mode = "over";
+    this.mode = 'over';
     this.drawer.close();
   }
 
-  private maSizeScreen(): void{
+  private maSizeScreen(): void {
     this.isScreenAll = true;
-    this.mode = "side";
+    this.mode = 'side';
     this.drawer.open();
   }
 

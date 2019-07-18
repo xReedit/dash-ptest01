@@ -9,11 +9,14 @@ import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
 import { MatTabsModule } from '@angular/material/tabs';
+import { MatButtonModule } from '@angular/material/button';
+
 
 @NgModule({
   imports: [
     CommonModule,
     MatCardModule,
+    MatButtonModule,
     MatIconModule,
     MatInputModule,
     MatSortModule,
@@ -25,6 +28,7 @@ import { MatTabsModule } from '@angular/material/tabs';
   exports: [
     MatCardModule,
     MatIconModule,
+    MatButtonModule,
     MatInputModule,
     MatSortModule,
     MatPaginatorModule,

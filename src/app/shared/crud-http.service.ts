@@ -7,12 +7,15 @@ import { InfoTockenService } from './services/info-tocken.service';
 @Injectable()
 export class CrudHttpService {
 
-  constructor(private httpClient: HttpClient, private infoTockenService: InfoTockenService) {
+  constructor(
+    private httpClient: HttpClient
+    , private infoTockenService: InfoTockenService
+    ) {
 
    }
 
   // conOrg, conSede FILTRAN SI NO SE ESPECIFICA POR ORG Y SEDE
-  getAll(controller: string, evento: string, conOrg: boolean = true, conSede: boolean = true, token: boolean = false): Observable<any[]> {
+  getAll(controller: string, evento: string, conOrg: boolean = true, conSede: boolean = true, token: boolean = true): Observable<any[]> {
     const url = this.setUrlFiltros(controller, evento, conOrg, conSede);
     const header = token ? this.getHeaderHttpClientForm() : null;
 
@@ -66,6 +69,14 @@ export class CrudHttpService {
     return this.httpClient.put<any>(url, datos, { headers: header });
   }
 
+  // enviar idorg o idsede o idusuario vacios, el back end los llenara
+  postFree(datos: any, controller: string, evento: string = 'update'): Observable<any> {
+    const url = this.setUrl(controller, evento);
+    const header = this.getHeaderHttpClientForm();
+
+    return this.httpClient.post<any>(url, datos, { headers: header });
+  }
+
   getFilterBy(controller: string, evento: string,
     filter: string, conOrg: boolean = true, conSede: boolean = true): Observable<any[]> {
 
@@ -85,6 +96,13 @@ export class CrudHttpService {
     const header = this.getHeaderHttpClientFormNoToken();
 
     return this.httpClient.post<any>(url, datos, { headers: header });
+  }
+
+  verificarToken(): Observable<any> {
+    const url = this.setUrl('verificarToken', '');
+    const header = this.getHeaderHttpClientForm();
+
+    return this.httpClient.post<any>(url, { headers: header });
   }
 
 

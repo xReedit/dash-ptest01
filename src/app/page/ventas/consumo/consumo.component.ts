@@ -11,6 +11,7 @@ import { CrudHttpService } from 'src/app/shared/crud-http.service';
 import { PlantillaGraficosService } from 'src/app/shared/services/plantilla-graficos.service';
 import { UtilesService } from 'src/app/shared/services/utiles.service';
 import { D3FormatLocalService } from 'src/app/shared/services/d3-format-local.service';
+import { MetaModel } from 'src/app/model/meta.model';
 
 @Component({
   selector: 'app-consumo',
@@ -18,6 +19,7 @@ import { D3FormatLocalService } from 'src/app/shared/services/d3-format-local.se
   styleUrls: ['./consumo.component.css']
 })
 export class ConsumoComponent implements OnInit {
+  meta: MetaModel = new MetaModel();
   datos_consumo: any;
   fecha_actual = '';
 
@@ -36,9 +38,27 @@ export class ConsumoComponent implements OnInit {
     // console.log(tip);
 
     d3.timeFormatDefaultLocale(this.d3FormatLocalService.formatoLocal());
-    this.xGetFechaActual();
+    this.getDataMeta();
     window.addEventListener('resize', this.resize.bind(this));
     // this.xDc();
+  }
+
+  getDataMeta() {
+    this.crudService.getAll('estadistica', 'getMetaSede', false, false).subscribe((res: any) => {
+      if ( !res.success ) { console.log(res); return; }
+      if (res.data.length === 0) {
+        this.meta.diaria = 0;
+        this.meta.mensual = 0;
+        this.meta.anual = 0;
+        return;
+      }
+
+      this.meta.diaria = res.data[0].diaria;
+      this.meta.mensual = res.data[0].mensual;
+      this.meta.anual = res.data[0].anual;
+
+      this.xGetFechaActual();
+    });
   }
 
   private resize() {
@@ -161,36 +181,36 @@ export class ConsumoComponent implements OnInit {
       const hhDimension = cf_ventas.dimension((x: any) => x.hora24);
 
 
-      function ordenDia(p: any) { return p.f; }
-      // consumo por dia
-      let dd_consumoDias = ddWeekDimension.group().reduce(
-        // add
-        (p: any, v: any) => {
-          ++p.count;
-          p.xtotal += parseFloat(v.total_a);
-          p.f = v.dd;
-          p.descripcion = v.nom_dia;
-          p.num_dia_semana = v.num_dia_semana;
-          return p;
-        },
-        // remove
-        (p: any, v: any) => {
-          --p.count;
-          p.xtotal -= parseFloat(v.total_a);
-          p.f = v.dd;
-          p.descripcion = v.nom_dia;
-          p.num_dia_semana = v.num_dia_semana;
-          return p;
+      // function ordenDia(p: any) { return p.f; }
+      // // consumo por dia
+      // let dd_consumoDias = ddWeekDimension.group().reduce(
+      //   // add
+      //   (p: any, v: any) => {
+      //     ++p.count;
+      //     p.xtotal += parseFloat(v.total_a);
+      //     p.f = v.dd;
+      //     p.descripcion = v.nom_dia;
+      //     p.num_dia_semana = v.num_dia_semana;
+      //     return p;
+      //   },
+      //   // remove
+      //   (p: any, v: any) => {
+      //     --p.count;
+      //     p.xtotal -= parseFloat(v.total_a);
+      //     p.f = v.dd;
+      //     p.descripcion = v.nom_dia;
+      //     p.num_dia_semana = v.num_dia_semana;
+      //     return p;
 
-        },
-        // init
-        () => {
-          return { f: '', count: 0, xtotal: 0, descripcion: '' };
-        }
-      ).order(ordenDia).top(7);
+      //   },
+      //   // init
+      //   () => {
+      //     return { f: '', count: 0, xtotal: 0, descripcion: '' };
+      //   }
+      // ).order(ordenDia).top(7);
 
-      dd_consumoDias = dd_consumoDias.sort();
-      console.log('consumno por dia ', dd_consumoDias);
+      // dd_consumoDias = dd_consumoDias.sort();
+      // console.log('consumno por dia ', dd_consumoDias);
 
       // const _columns_dd_x = ('x' + ',' + dd_consumoDias.map((x: any) => dateFormat3(x.value.f)).join(',')).split(',');
       // const _values_dd_x = ('Dias' + ',' + dd_consumoDias.map((x: any) => x.value.xtotal).join(',')).split(',');
@@ -203,72 +223,72 @@ export class ConsumoComponent implements OnInit {
 
 
       // de los ultimos 12 meses // falta meta que debe ser mensual
-      function ordenMMMeta(p: any) { return p.f; }
-      const dd_metaMensual = mmDimension.group().reduce(
-        // add
-        (p: any, v: any) => {
-          ++p.count;
-          p.xtotal += parseFloat(v.total_a);
-          p.f = v.mm;
-          p.descripcion = v.nom_mes;
-          p.num_mes = v.num_mes;
-          p.num_mes_int = v.num_mes_int;
-          return p;
-        },
-        // remove
-        (p: any, v: any) => {
-          --p.count;
-          p.xtotal -= parseFloat(v.total_a);
-          p.f = v.mm;
-          p.descripcion = v.nom_mes;
-          p.num_mes = v.num_mes;
-          p.num_mes_int = v.num_mes_int;
-          return p;
+      // function ordenMMMeta(p: any) { return p.f; }
+      // const dd_metaMensual = mmDimension.group().reduce(
+      //   // add
+      //   (p: any, v: any) => {
+      //     ++p.count;
+      //     p.xtotal += parseFloat(v.total_a);
+      //     p.f = v.mm;
+      //     p.descripcion = v.nom_mes;
+      //     p.num_mes = v.num_mes;
+      //     p.num_mes_int = v.num_mes_int;
+      //     return p;
+      //   },
+      //   // remove
+      //   (p: any, v: any) => {
+      //     --p.count;
+      //     p.xtotal -= parseFloat(v.total_a);
+      //     p.f = v.mm;
+      //     p.descripcion = v.nom_mes;
+      //     p.num_mes = v.num_mes;
+      //     p.num_mes_int = v.num_mes_int;
+      //     return p;
 
-        },
-        // init
-        () => {
-          return { f: '', count: 0, xtotal: 0, descripcion: '', num_mes_int: 0 };
-        }
-      );
+      //   },
+      //   // init
+      //   () => {
+      //     return { f: '', count: 0, xtotal: 0, descripcion: '', num_mes_int: 0 };
+      //   }
+      // );
       // .order(ordenMMMeta).top(12);
+      // console.log('consumo meses', dd_metaMensual);
 
 
 
-      console.log('consumo meses', dd_metaMensual);
-      const chart = dc.barChart('#chart-row-spenders');
 
       const xdateFormatParserNomMesLarge = d3.timeFormat('%B');
       const xformat_money: any = d3.format('(,.2f');
 
-      const mm_values = mmDimension.group().reduceSum((d: any) => +d.total_a);
-      const minDate = new Date(mmDimension.bottom(1)[0].mm);
-      const maxDate = new Date(mmDimension.top(1)[0].mm);
+      // const mm_values = mmDimension.group().reduceSum((d: any) => +d.total_a);
+      // const minDate = new Date(mmDimension.bottom(1)[0].mm);
+      // const maxDate = new Date(mmDimension.top(1)[0].mm);
 
-      chart
-        .width(500)
-        .height(200)
-        // .x(d3.scaleBand())
-        .x(d3.scaleTime().domain([minDate.setMonth(minDate.getMonth() - 2), maxDate.setMonth(maxDate.getMonth() + 2)]))
-        .round(d3.timeMonth.round)
-        .xUnits(d3.timeMonths)
-        // .xUnits(dc.units.ordinal)
-        .elasticY(true)
-        .brushOn(true)
-        .mouseZoomable(true)
-        .dimension(mmDimension)
-        .group(mm_values)
-        .centerBar(true)
-        // .renderHorizontalGridLines(true)
-        // .on('renderlet', function (a) {
-        //   a.selectAll('rect').on('click', function (d) {
-        //     console.log('click!', d);
-        // })
-        // .renderLabel(true)
-        // .label(d => xformat_money(d.value))
-        .controlsUseVisibility(true)
-        // .addFilterHandler(function (filters, filter) { return [filter]; })
-        .title(d => xdateFormatParserNomMesLarge(d.key) + ': ' + xformat_money(d.value));
+      // const chart = dc.barChart('#chart-row-spenders');
+      // chart
+      //   .width(500)
+      //   .height(200)
+      //   // .x(d3.scaleBand())
+      //   .x(d3.scaleTime().domain([minDate.setMonth(minDate.getMonth() - 2), maxDate.setMonth(maxDate.getMonth() + 2)]))
+      //   .round(d3.timeMonth.round)
+      //   .xUnits(d3.timeMonths)
+      //   // .xUnits(dc.units.ordinal)
+      //   .elasticY(true)
+      //   .brushOn(true)
+      //   .mouseZoomable(true)
+      //   .dimension(mmDimension)
+      //   .group(mm_values)
+      //   .centerBar(true)
+      //   // .renderHorizontalGridLines(true)
+      //   // .on('renderlet', function (a) {
+      //   //   a.selectAll('rect').on('click', function (d) {
+      //   //     console.log('click!', d);
+      //   // })
+      //   // .renderLabel(true)
+      //   // .label(d => xformat_money(d.value))
+      //   .controlsUseVisibility(true)
+      //   // .addFilterHandler(function (filters, filter) { return [filter]; })
+      //   .title(d => xdateFormatParserNomMesLarge(d.key) + ': ' + xformat_money(d.value));
         // .x(d3.scaleBand()).elasticX(true)
         // .xUnits(dc.units.ordinal)
         // .xUnits(d3.timeMonths)
@@ -286,13 +306,15 @@ export class ConsumoComponent implements OnInit {
         // .controlsUseVisibility(true);
 
       // chart compuesto
-      // d3.schemeCategory10()
+      const minDate = new Date(mmDimension.bottom(1)[0].mm);
+      const maxDate = new Date(mmDimension.top(1)[0].mm);
       const composite = dc.compositeChart('#chart_consumo_mm_y_rentabilidad');
       const grp1 = mmDimension.group().reduceCount((d: any) => d.idpedido);
       const grp2 = mmDimension.group().reduceSum((d: any) => +d.total_a);
-      const margins = { top: 10, right: 30, bottom: 30, left: 50 };
+
+      // const margins = { top: 10, right: 30, bottom: 30, left: 50 };
       composite
-        .x(d3.scaleTime().domain([minDate.setMonth(minDate.getMonth() - 1), maxDate.setMonth(maxDate.getMonth() + 1)]))
+        .x(d3.scaleTime().domain([minDate.setMonth(minDate.getMonth() - 2), maxDate.setMonth(maxDate.getMonth() + 2)]))
         .round(d3.timeMonth.round)
         .xUnits(d3.timeMonths)
         .legend(dc.legend().x(80).y(20).itemHeight(13).gap(5))
@@ -322,13 +344,34 @@ export class ConsumoComponent implements OnInit {
         // .controlsUseVisibility(true);
         // render();
 
+      const chart_consumo_dd = dc.barChart('#chart_consumo_mm_y_rentabilidad_dd');
+      const chart_dia_consumo_group = ddDimension.group().reduceSum((d: any) => +d.total_a);
+      // const minDate_dd = new Date(ddDimension.bottom(1)[0].dd);
+      // const maxDate_dd = new Date(ddDimension.top(1)[0].dd);
+
+      chart_consumo_dd
+        .height(200)
+        .x(d3.scaleTime().domain([minDate.setDate(minDate.getDay() - 2), maxDate.setDate(maxDate.getDay() + 2)]))
+        .round(d3.timeDay.round)
+        .xUnits(d3.timeDays)
+        .title((d: any) => dateFormatParserNomDayLarge(d.key) + ': ' + xformat_money(d.value))
+        .yAxisPadding('10%')
+        .elasticY(true)
+        .brushOn(false)
+        .mouseZoomable(true)
+        .dimension(ddDimension)
+        .group(chart_dia_consumo_group)
+        .centerBar(true)
+        .controlsUseVisibility(true);
+
+
       // tipo de consumo
-      const chartConsumo = dc.pieChart('#chart-consumo');
+      const chartConsumo = dc.pieChart('#chart_tipo_consumo');
       const tpcDimension = cf_ventas.dimension((x: any) => x.tpc_descripcion);
       const tpcGroup = tpcDimension.group().reduceSum((d: any) => +d.total_a);
 
       chartConsumo
-        .width(200).height(200)
+        .height(200)
         .slicesCap(4)
         .dimension(tpcDimension)
         .group(tpcGroup)
@@ -337,10 +380,16 @@ export class ConsumoComponent implements OnInit {
         .externalRadiusPadding(50)
         .externalLabels(40);
 
+
+      // dia de mas ConsumoComponent
+      // const chart_dia_consumo = dc.compositeChart('#chart_dia_consumo');
+      // const chart_dia_consumo_count = ddDimension.group().reduceCount();
+      // const chart_dia_consumo_importe = ddDimension.group().reduceSum((d: any) => +d.total_a);
+
+      // console.log('chart_dia_consumo_count ', ddDimension);
+
       dc.renderAll();
-      // chartConsumo.render();
-      // chart.render();
-        // .addFilterHandler(function(filters, filter) {return [filter];}); // this
+
       });
 
       // const _columns_mm_x = ('x' + ',' + dd_metaMensual.map((x: any) => dateFormat3(x.key)).join(',')).split(',');

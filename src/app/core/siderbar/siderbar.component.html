@@ -11,8 +11,8 @@
         <hr>
         <mat-nav-list class="list-unstyled components">
             <div class="item">
-                <mat-list-item>
-                    <a href="#">
+                <mat-list-item [routerLink]="[ '/dashboard']">
+                    <a>
                         <i class="fas fa-home"></i>
                         Incio
                     </a>                        
@@ -47,7 +47,7 @@
                 <mat-list-item>
                     <a href="#">
                         <i class="fas fa-image"></i>
-                        Venta
+                        Compras
                     </a>
                 </mat-list-item>
             </div>
@@ -55,10 +55,18 @@
                 <mat-list-item>
                     <a href="#">
                         <i class="fas fa-question"></i>
-                        Clientes
+                        Gastos
                     </a>
                 </mat-list-item>
-            </div>            
+            </div>   
+            <div class="item">
+              <mat-list-item [routerLink]="[ '/configuraciones']">
+                <a>
+                  <i class="fas fa-question"></i>
+                  Establecer metas
+                </a>
+              </mat-list-item>
+            </div>
         </mat-nav-list>
     </nav>
 </div>

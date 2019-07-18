@@ -1,13 +1,20 @@
 
 <mat-drawer-container class="example-container animated fadeIn" autosize>
     <mat-drawer #drawer class="example-sidenav" [mode]="mode">        
-        <app-siderbar></app-siderbar>
+        <app-siderbar></app-siderbar>        
     </mat-drawer>
 
     <mat-drawer-content>         
     <div class="example-sidenav-content">
         <app-header-tollbar (_click_btn_bar)="showDrawer()"></app-header-tollbar>
-        <div class="contenedor-master" #container id="container">            
+        <!-- *ngIf="progressLoadingService.isSeeProgress$ | async" -->
+        <mat-progress-bar            
+            [hidden]="!isLoading"
+            color="warn" mode="indeterminate">
+        </mat-progress-bar>
+        <div class="contenedor-master"
+            [ngClass]="{'d-disabled': isLoading, 'animated fadeIn': !isLoading}"
+            #container id="container">
             <div class="contenedor-principal">                  
                 <!-- <h1>principal</h1> -->
                 <router-outlet></router-outlet>

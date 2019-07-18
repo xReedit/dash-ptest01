@@ -1,4 +1,6 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { AuthService } from 'src/app/shared/services/auth.service';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -8,13 +10,18 @@ import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 })
 export class HeaderTollbarComponent implements OnInit {
   @Output('_click_btn_bar') _click_btn_bar: EventEmitter<boolean> = new EventEmitter(false);
-  constructor() { }
+  constructor(private authService: AuthService, private router: Router) { }
 
   ngOnInit() {
   }
 
   showDrawer() {
     this._click_btn_bar.emit(true);
+  }
+
+  exitProgram() {
+    this.authService.loggedOutUser();
+    this.router.navigate(['/session/login']);
   }
 
 }

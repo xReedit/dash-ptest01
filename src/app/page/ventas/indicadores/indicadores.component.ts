@@ -10,6 +10,8 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
 import { D3FormatLocalService } from 'src/app/shared/services/d3-format-local.service';
+import { ProgressLoadingService } from 'src/app/shared/services/progress-loading.service';
+import { MetaModel } from 'src/app/model/meta.model';
 
 @Component({
   selector: 'app-indicadores',
@@ -17,6 +19,8 @@ import { D3FormatLocalService } from 'src/app/shared/services/d3-format-local.se
   styleUrls: ['./indicadores.component.css']
 })
 export class IndicadoresComponent implements OnInit {
+
+  meta: MetaModel = new MetaModel();
 
   chart_meta_dia: any;
   chart_meta_mes: any;
@@ -77,16 +81,20 @@ export class IndicadoresComponent implements OnInit {
     public crudService: CrudHttpService,
     public plantillaGraficos: PlantillaGraficosService,
     public utilesService: UtilesService,
-    public d3FormatLocalService: D3FormatLocalService) { }
+    public d3FormatLocalService: D3FormatLocalService,
+    private progressLoadingService: ProgressLoadingService
+    ) { }
 
   ngOnInit() {
+    this.progressLoadingService.setLoading(true);
     this.data_cliente_consumo.paginator = this.paginator;
 
     d3.timeFormatDefaultLocale(this.d3FormatLocalService.formatoLocal());
     this.format_money = d3.format('(,.2f');
 
 
-    this.xGetFechaActual();
+    // this.xGetFechaActual();
+    this.getDataMeta();
 
     // const _chart = c3.generate({
     //   bindto: '#chart',
@@ -122,6 +130,24 @@ export class IndicadoresComponent implements OnInit {
 
 
 
+  }
+
+  getDataMeta() {
+    this.crudService.getAll('estadistica', 'getMetaSede', false, false).subscribe((res: any) => {
+      if (!res.success) { console.log(res); return; }
+      if (res.data.length === 0) {
+        this.meta.diaria = 0;
+        this.meta.mensual = 0;
+        this.meta.anual = 0;
+        return;
+      }
+
+      this.meta.diaria = res.data[0].diaria;
+      this.meta.mensual = res.data[0].mensual;
+      this.meta.anual = res.data[0].anual;
+
+      this.xGetFechaActual();
+    });
   }
 
   /// function tasa de clientes segun perdiodo
@@ -219,9 +245,9 @@ export class IndicadoresComponent implements OnInit {
       const clieDimension = cf_ventas.dimension(x => x.idcliente);
 
       // const meta diaria
-      const meta_diaria = 2100;
-      const meta_mensual = 50000;
-      const meta_anual = 500000;
+      const meta_diaria = this.meta.diaria;
+      const meta_mensual = this.meta.mensual;
+      const meta_anual = this.meta.anual;
 
       // hora
       function ordenHoraPunta(p: any) { return p.hora24; }
@@ -688,6 +714,7 @@ export class IndicadoresComponent implements OnInit {
       this.tasa_clientes_tiket_promedio_mes_anterior = this.format_money(this.tasa_clientes_tiket_promedio_mes_anterior);
 
 
+      this.progressLoadingService.setLoading(false);
     });
   }
 

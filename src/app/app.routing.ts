@@ -9,25 +9,31 @@ export const AppRoutes: Routes = [
       canActivate: [AuthGuard],
       component: AdminLayoutComponent,
       children: [
+        // {
+        //   path: 'dashboard',
+        //   loadChildren: './dashboard/dashboard.module#DashboardModule',
+        //   canActivate: [AuthGuard],
+        //   data : {'tituloModulo' : 'Inicio'}
+        // },
         {
-        path: '',
-        loadChildren: './dashboard/dashboard.module#DashboardModule',
-        canActivate: [AuthGuard],
-        data : {'tituloModulo' : 'Inicio'}
-        },
-        {
-          path: 'ventas',
+          // path: 'ventas',
+          path: 'dashboard', // por los momentos
           loadChildren: './page/ventas/ventas.module#VentasModule',
           data: { 'tituloModulo': 'Ventas:'  }
+        },
+        {
+          path: 'configuraciones', // por los momentos
+          loadChildren: './page/configuraciones/configuraciones.module#ConfiguracionesModule',
+          data: { 'tituloModulo': 'Configuraciones:' }
         }
       ]
     },
-    {
-      path: '',
-      component: AuthLayoutComponent,
-      children: [{
-        path: 'session',
-        loadChildren: './session/session.module#SessionModule'
-      }]
-    }
+  {
+    path: '',
+    component: AuthLayoutComponent,
+    children: [{
+      path: 'session',
+      loadChildren: './session/session.module#SessionModule'
+    }]
+  }
 ];

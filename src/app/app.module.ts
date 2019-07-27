@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { HttpClientModule, HttpClient } from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
 import { CrudHttpService } from './shared/crud-http.service';
 
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -39,7 +39,7 @@ import { BreadcrumbComponent } from './core/breadcrumb/breadcrumb.component';
     BrowserModule,
     BrowserAnimationsModule,
     FormsModule,
-    RouterModule.forRoot(AppRoutes),
+    RouterModule.forRoot(AppRoutes, { useHash: true }),
     HttpClientModule,
 
     MatToolbarModule,

@@ -33,6 +33,7 @@ export class AdminLayoutComponent implements OnInit, OnDestroy {
     }
 
     this.isProgreesBar = this.progressLoadingService.isSeeProgress$
+    .pipe(delay(0))
     .subscribe((res) => {
       this.isLoading = res;
     });

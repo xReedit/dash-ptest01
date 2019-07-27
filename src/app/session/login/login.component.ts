@@ -30,7 +30,7 @@ export class LoginComponent implements OnInit {
           this.authService.setLocalToken(res.token);
           this.authService.setLoggedStatus(true);
           this.authService.setLocalUsuario(this.usuario);
-          this.router.navigate(['/dashboard']);
+          this.router.navigate(['/principales']);
           // this.loading = false;
         } else {
           this.loading = false;

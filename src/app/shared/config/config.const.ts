@@ -1,4 +1,5 @@
-export const URL_SERVER = 'http://localhost:3000/v2/';
+export const URL_SERVER = 'http://localhost:3719/v2/'; // desarrollo
+// export const URL_SERVER = 'https://restobar.papaya.com.pe/api/v2/'; // produccion
 
 
 export const MSJ_SUCCESS: any = {

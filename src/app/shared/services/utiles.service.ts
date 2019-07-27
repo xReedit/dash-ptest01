@@ -68,6 +68,21 @@ export class UtilesService {
     return nom_corto ? short_name[num_dia] : long_name[num_dia];
   }
 
+  // numero de dias del mes
+  getDaysInMonth (month: number, year: number) {
+    return new Date(year, month, 0).getDate();
+  }
+
+  // retorna el numero de dias del mes en un array -> especialmente para Label X del chart
+  getArrDaysMonth(days: number) {
+    const arrRpt = [];
+    for (let index = 0; index < days; index++) {
+      arrRpt[index] = index + 1;
+    }
+
+    return arrRpt;
+  }
+
   setearFormulario (form: FormGroup, data: any): FormGroup {
     Object.keys(data).forEach(name => {
       if (form.controls[name]) {
@@ -79,11 +94,14 @@ export class UtilesService {
   }
 
   ReduceGroupBy = function (xs: any, key: string) {
+    let objKey: any;
     return xs.reduce(function (rv, x) {
-      (rv[x[key]] = rv[x[key]] || []).push(x);
+      objKey = key ? x[key] : x;
+      (rv[objKey] = rv[objKey] || []).push(x);
       return rv;
     }, {});
   };
+
 
   ReduceGroupAndSum = function (xs: any, key: string) {
     return Object.values(xs.reduce((r: any, o: any) => (r[o[key]]

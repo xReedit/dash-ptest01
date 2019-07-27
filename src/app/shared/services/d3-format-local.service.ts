@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { TimeLocaleDefinition } from 'd3-time-format';
 import * as d3 from 'd3';
 import { UtilesService } from './utiles.service';
+import { CrudHttpService } from '../crud-http.service';
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +11,9 @@ export class D3FormatLocalService {
 
   format_money: any = d3.format('(,.2f');
 
-  constructor(public utilesService: UtilesService) { }
+  constructor(
+    public utilesService: UtilesService,
+    private crudService: CrudHttpService) { }
 
   formatoLocal(): TimeLocaleDefinition {
     return {
@@ -29,7 +32,11 @@ export class D3FormatLocalService {
     return this.format_money(value);
   }
 
+
   setearDataTimeDimension(data: any, nom_campo: string, fecha_actual: string): any {
+
+    data = typeof (data) === 'object' ? Object.values(data) : data;
+
     // preparamos fechas para las dimensiones
     const dateFormatSpecifier = '%d/%m/%Y';
     const dateFormatSpecifier2 = '%m-%d-%Y';
@@ -51,6 +58,7 @@ export class D3FormatLocalService {
     const dateFormatParserHora12 = d3.timeFormat('%I %p');
     const dateFormatParserNumMes = d3.timeFormat('%m');
     const dateFormatParserNumDiaSemana = d3.timeFormat('%w');
+    const dateFormatParserNumDiaYY = d3.timeFormat('%j'); // día del año como número decimal [001,366].
 
     return data.map((d: any) => {
       const fecha_hora = d[nom_campo].split(' ');
@@ -59,6 +67,7 @@ export class D3FormatLocalService {
       const fecha_hora_12 = fecha_hora[0] + ' ' + fecha_hora[1].split(':')[0] + ':00:00';
       const solo_hora_24 = '01/01/2019' + ' ' + fecha_hora[1].split(':')[0] + ':00:00';
 
+      d.dd_string = fecha_hora[0]; // fecha string para comparaciones en algunos casos
       d.ddd = dateFormatParserHora(fecha_hora_12); // fecha con hora
       d.hora_solo = dateFormatParserHora(solo_hora_24); // solo hora
       d.hora = fecha_hora[1]; // solo hora
@@ -68,6 +77,7 @@ export class D3FormatLocalService {
       d.nom_dia = dateFormatParserNomDay(d.dd);
       d.num_dia = d.dd.getDate();
       d.num_dia_semana = dateFormatParserNumDiaSemana(d.dd);
+      d.num_dia_yy = dateFormatParserNumDiaYY(d.dd); // día del año como número decimal [001,366].
       d.dd2 = dateFormat2(d.dd);
       d.num_week = dateFormatParserWeek(d.dd);
       d.dd3 = dateFormat3(d.dd);
@@ -94,4 +104,5 @@ export class D3FormatLocalService {
       return d;
     });
   }
+
 }

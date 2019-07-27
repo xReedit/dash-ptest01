@@ -50,6 +50,7 @@ export class PlantillaGraficosService {
       },
       data: {
         x: 'x',
+        // xs: {},
         // columns: [
         //   ['x', '2019-04-08', '2019-04-09', '2019-04-10', '2019-04-11', '2019-04-12', '2019-04-13', '2019-04-14'],
         //   ['Semana Pasada', 30, 280, 170, 400, 150, 250, 300],
@@ -71,6 +72,37 @@ export class PlantillaGraficosService {
       },
       legend: {
         show: false
+      }
+    });
+
+  }
+
+  // multiples Label X (multiple data)
+  plantillaGraficoMultiLineYFalse(div: string, _type: string = 'area-spline', _format: string = '%a', _height: number = 125, _showLegend = false) {
+
+    return c3.generate({
+      bindto: '#' + div,
+      size: {
+        height: _height,
+      },
+      data: {
+        xs: {},
+        columns: [],
+        type: _type
+      },
+      axis: {
+        x: {
+          type: 'timeseries',
+          tick: {
+            format: _format
+          }
+        },
+        y: {
+          show: false
+        }
+      },
+      legend: {
+        show: _showLegend
       }
     });
 

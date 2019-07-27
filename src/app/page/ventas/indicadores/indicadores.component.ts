@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import * as d3 from 'd3';
-// import * as c3 from 'c3';
 import * as cf from 'crossfilter2';
+// import * as c3 from 'c3';
 import { CrudHttpService } from 'src/app/shared/crud-http.service';
 import { UtilesService } from 'src/app/shared/services/utiles.service';
 import { PlantillaGraficosService } from 'src/app/shared/services/plantilla-graficos.service';
@@ -219,9 +219,9 @@ export class IndicadoresComponent implements OnInit {
       const dateFormatParser = d3.timeParse(dateFormatSpecifier);
       const dateFormatParserNomDayLarge = d3.timeFormat('%A');
       const dateFormatParserNomMesLarge = d3.timeFormat('%B');
+      const dateFormatParserNumMes = d3.timeFormat('%m');
       // const dateFormatParserHora24 = d3.timeFormat('%H');
       // const dateFormatParserHora12 = d3.timeFormat('%I %p');
-      const dateFormatParserNumMes = d3.timeFormat('%m');
       // const numberFormat = d3.format('.2f');
 
 

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import * as d3 from 'd3';
 import * as cf from 'crossfilter2';
 
@@ -10,8 +10,8 @@ import { UtilesService } from 'src/app/shared/services/utiles.service';
 
 @Component({
   selector: 'app-punto-equilibrio',
-  templateUrl: './punto-equilibrio.component.html',
-  styleUrls: ['./punto-equilibrio.component.css']
+  templateUrl: './punto-equilibrio.component.html'
+  // styles: ['./punto-equilibrio.component.css']
 })
 export class PuntoEquilibrioComponent implements OnInit {
   datos: any = [];
@@ -19,10 +19,21 @@ export class PuntoEquilibrioComponent implements OnInit {
   format_money: any;
   fecha_actual = '';
 
-  arrFiltroSelect = {
-    mm: 7,
-    yy: 2019
-  };
+  /* varoables info de grafico */
+  totalIngresos = '';
+  totalGastos = '';
+  totalGanancia = '';
+  hayGanancia = false;
+  fechaPasoPuntoEq = ''; // la fecha donde se llego o paso el punto de equilibrio
+
+  //
+  porcentejeGasto = 0;
+  porcentejeGanancia = 0;
+
+  // arrFiltroSelect = {
+  //   mm: 7,
+  //   yy: 2019
+  // };
 
   constructor(
     private crudService: CrudHttpService,
@@ -69,6 +80,7 @@ export class PuntoEquilibrioComponent implements OnInit {
     // formatos d3
     const dateFormatParserNumDia = d3.timeFormat('%d');
     const dateFormat3 = d3.timeFormat('%Y-%m-%d'); // para label x graficos
+    const dateFormatNomDiaLargeDD = d3.timeFormat('%A %d');
 
     // // convertir a crossfilter
     const cf_ventas = cf(dt_ventas_g_v);
@@ -87,16 +99,21 @@ export class PuntoEquilibrioComponent implements OnInit {
     function ordenbDDMeta(p: any) { return p.key; }
     let impSumIngreso = 0;
     let impSumEgreso = 0;
+    // let impGastoTotal = this.datos.gastos_fijos[0].importe + this.datos.rrhh[0].importe;
+    // let fechaPuntoEquilibrio: any; // fecha en la cual se llego al punto de equilibrio
     const dd_metadiaria = ddTipo.group().reduce(
       // add
       (p: any, v: any, nf) => {
         p.count += 1;
         p.isIngreso = v.tipo === '1' ? true : false;
         p.xtotal += parseFloat(v.importe);
+        // if (impSumIngreso > impGastoTotal && !fechaPuntoEquilibrio ) { fechaPuntoEquilibrio = v.dd; }
         impSumIngreso += p.isIngreso ? p.xtotal : 0;
         impSumEgreso += !p.isIngreso ? p.xtotal : 0;
+        // impGastoTotal += !p.isIngreso ? impSumEgreso : 0;
         p.impSumIngreso = impSumIngreso;
         p.impSumEgreso = impSumEgreso;
+
         p.f = v.dd;
         p.numdiaYY = parseInt(v.num_dia_yy, 0);
         return p;
@@ -106,10 +123,13 @@ export class PuntoEquilibrioComponent implements OnInit {
         p.count -= 1;
         p.isIngreso = v.tipo === '1' ? true : false;
         p.xtotal -= parseFloat(v.importe);
+        // if (impSumIngreso > impGastoTotal && !fechaPuntoEquilibrio ) { fechaPuntoEquilibrio = v.dd; }
         impSumIngreso -= p.isIngreso ? p.xtotal : 0;
         impSumEgreso -= !p.isIngreso ? p.xtotal : 0;
+        // impGastoTotal += !p.isIngreso ? impSumEgreso : 0;
         p.impSumIngreso = impSumIngreso;
         p.impSumEgreso = impSumEgreso;
+
         p.f = v.dd;
         p.numdiaYY = parseInt(v.num_dia_yy, 0);
         return p;
@@ -136,11 +156,12 @@ export class PuntoEquilibrioComponent implements OnInit {
     const _values_ingresos = ('Ingresos' + ',' + arrDataMesSeleccionado.map((x: any) => x.importeIngreso).join(',')).split(',');
     const _values_egresos = ('Egresos' + ',' + arrDataMesSeleccionado.map((x: any) => x.importeEgreso).join(',')).split(',');
 */
-
     const xs_ingresos = ('x_ingresos' + ',' + mes_seleccionado.filter((x: any) => x.value.isIngreso).map((x: any) => dateFormat3(x.value.f)).join(',')).split(',');
     const xs_egresos = ('x_egresos' + ',' + mes_seleccionado.filter((x: any) => !x.value.isIngreso).map((x: any) => dateFormat3(x.value.f)).join(',')).split(',');
-    const _values_ingresos = ('Ingresos' + ',' + mes_seleccionado.filter((x: any) => x.value.isIngreso).map((x: any) => x.value.impSumIngreso).join(',')).split(',');
-    const _values_egresos = ('Gastos Variables' + ',' + mes_seleccionado.filter((x: any) => !x.value.isIngreso).map((x: any) => x.value.impSumEgreso).join(',')).split(',');
+    const _values_ingresos = ('Total Ingresos' + ',' + mes_seleccionado.filter((x: any) => x.value.isIngreso).map((x: any) => x.value.impSumIngreso).join(',')).split(',');
+    const _values_ingresos_dia = ('Ingreso x Dia' + ',' + mes_seleccionado.filter((x: any) => x.value.isIngreso).map((x: any) => x.value.xtotal).join(',')).split(',');
+    const _values_egresos = ('Total Gastos Variables' + ',' + mes_seleccionado.filter((x: any) => !x.value.isIngreso).map((x: any) => x.value.impSumEgreso).join(',')).split(',');
+    const _values_egresos_dia = ('Gastos Variables x Dia' + ',' + mes_seleccionado.filter((x: any) => !x.value.isIngreso).map((x: any) => x.value.xtotal).join(',')).split(',');
 
     console.log('xs_ingresos', xs_ingresos);
     console.log('xs_egresos', xs_egresos);
@@ -149,14 +170,18 @@ export class PuntoEquilibrioComponent implements OnInit {
 
     this.chart_ingreso_egreso.load({
       xs: {
-        'Ingresos': 'x_ingresos',
-        'Gastos Variables': 'x_egresos'
+        'Total Ingresos': 'x_ingresos',
+        'Ingreso x Dia': 'x_ingresos',
+        'Total Gastos Variables': 'x_egresos',
+        'Gastos Variables x Dia': 'x_egresos'
       },
       columns: [
         xs_ingresos,
         xs_egresos,
         _values_ingresos,
-        _values_egresos
+        _values_ingresos_dia,
+        _values_egresos,
+        _values_egresos_dia
         // _columns_x,
         // _values_ingresos,
         // _values_egresos
@@ -165,15 +190,34 @@ export class PuntoEquilibrioComponent implements OnInit {
 
     // cacular gastos totales = gf + gv
     const impGastoTotal = impSumEgreso + this.datos.gastos_fijos[0].importe + this.datos.rrhh[0].importe;
-    this.chart_ingreso_egreso.ygrids.add({ value: impGastoTotal, text: 'Total de Gastos ' + this.format_money(impGastoTotal) });
-    this.chart_ingreso_egreso.xgrids.add({ value: '2019-07-05', text: 'Punto de equilibrio ' });
+    const fechaPuntoEquilibrio = mes_seleccionado.filter((x: any) => x.value.impSumIngreso > impGastoTotal).map((x: any) => x.value.f )[0];
+    // const fechaPuntoEquilibrio = aa[0];
+    console.log(fechaPuntoEquilibrio);
+    this.chart_ingreso_egreso.ygrids.add({ value: impGastoTotal, class: 'lineRed', text: 'Total de Gastos ' + this.format_money(impGastoTotal) });
+    this.chart_ingreso_egreso.xgrids.add({ value: dateFormat3(fechaPuntoEquilibrio), class: 'lineGreen', text: 'Punto de equilibrio ' });
+    this.chart_ingreso_egreso.data.colors({
+      'Ingreso x Dia': d3.rgb('#29b6f6').darker(0),
+      'Total Gastos Variables': d3.rgb('#ef6c00').darker(0),
+      'Gastos Variables x Dia': d3.rgb('#e91e63').darker(0)
+    });
+
+    this.totalIngresos = this.format_money(impSumIngreso);
+    this.totalGastos = this.format_money(impGastoTotal);
+    this.totalGanancia = this.format_money(impSumIngreso - impGastoTotal);
+    this.hayGanancia = parseInt(this.totalGanancia, 0) > 0 ? true : false;
+
+    if (this.hayGanancia) {
+      this.fechaPasoPuntoEq = dateFormatNomDiaLargeDD(fechaPuntoEquilibrio);
+      this.porcentejeGasto = Math.round((parseInt(this.totalGastos, 0) / parseInt(this.totalIngresos, 0)) * 100);
+      this.porcentejeGanancia = 100 - this.porcentejeGasto;
+    }
 
 
     this.progressLoadingService.setLoading(false);
   }
 
   xAsignarPlantillaGraficos() {
-    this.chart_ingreso_egreso = this.plantillaGraficos.plantillaGraficoMultiLineYFalse('chart_ingreso_egreso', 'area-spline', '%e', 200, true);
+    this.chart_ingreso_egreso = this.plantillaGraficos.plantillaGraficoMultiLineYFalse('chart_ingreso_egreso', 'area-spline', '%e', 230, true);
   }
 
 }

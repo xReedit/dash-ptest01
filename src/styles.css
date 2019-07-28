@@ -3,7 +3,6 @@
 @import "../node_modules/c3/c3.min.css";
 @import "../node_modules/dc/dc.min.css";
 
-
 .animated {
     -webkit-animation-duration: 0.8s;
     animation-duration: 0.8s;

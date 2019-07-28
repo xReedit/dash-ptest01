@@ -2,10 +2,45 @@
   <div class="m-card">
     <div class="m-card-toolbar">
       <span class="titulo">Punto de equilibrio:</span><br>
-      <span class="text-secondary fs-14">Ingresos - gastos.</span>
+      <p class="text-secondary fs-13 text-justify">Punto de equilibrio es un concepto de las finanzas que hace
+        referencia al nivel
+        de ventas donde los costos fijos y variables se encuentran cubiertos. Esto supone que la empresa, en su punto de
+        equilibrio, tiene un beneficio que es igual a cero (no gana dinero, pero tampoco pierde). Al incrementar sus
+        ventas, logrará ubicarse por encima del punto de equilibrio y obtendrá ganancias.</p>
     </div>
     <hr>
     <div class="m-card-body">
+      <div class="row text-center">
+        <div class="col-sm-4 text-center border-de-dotted">
+          <div class="label-title-chart">{{totalIngresos}}</div>
+          <div class="label-subtitle-chart c-plomo-0 fsize-08">Total Ingresos</div>
+        </div>
+
+        <div class="col-sm-4 text-center border-de-dotted">
+          <div class="label-title-chart">{{totalGastos}}</div>
+          <div class="label-subtitle-chart c-plomo-0 fsize-08">Total Gastos</div>
+          <div [hidden]="!hayGanancia" 
+              class="label-subtitle-chart c-aaa fsize-07">
+              Los gastos representan el {{porcentejeGasto}}% de los ingresos.
+          </div>
+        </div>
+
+        <div class="col-sm-4 text-center border-de-dotted">
+          <div class="label-title-chart">
+              <i *ngIf="hayGanancia" class="fas fa-arrow-up text-success"></i> {{totalGanancia}}</div>
+          <div class="label-subtitle-chart c-plomo-0 fsize-08">Total Ganancia</div>
+          <div [hidden]="!hayGanancia" 
+              class="label-subtitle-chart c-aaa fsize-07">La ganancia es el {{porcentejeGanancia}}% de los ingresos.
+          </div>
+        </div>
+
+        <div class="col-sm-12 text-center">
+          <br>
+          <div [hidden]="!hayGanancia" class="label-subtitle-chart c-aaa fsize-08">
+            El <strong>{{fechaPasoPuntoEq}}</strong>, se llego al punto de equilibrio, es decir se cubrio todos los gastos <strong>registrados</strong>.</div>
+        </div>        
+      </div>
+      <hr>
       <div id="chart_ingreso_egreso"></div>
     </div>
   </div>

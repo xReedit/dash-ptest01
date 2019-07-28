@@ -285,3 +285,23 @@ p, span, div {
 	opacity: 0.5;
 	background: #CCC;
 }
+
+/*[styles c3]*/
+.c3-ygrid-line.lineRed line {
+  stroke: #ec407a;
+}
+
+.c3-ygrid-line.lineRed text {
+  fill: #ec407a;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.c3-xgrid-line.lineGreen line {
+  stroke: #757575;
+}
+
+.c3-xgrid-line.lineGreen text {
+  fill: #388e3c;
+  font-weight: 600;
+}

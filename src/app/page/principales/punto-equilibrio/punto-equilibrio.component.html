@@ -14,6 +14,9 @@
         <div class="col-sm-4 text-center border-de-dotted">
           <div class="label-title-chart">{{totalIngresos}}</div>
           <div class="label-subtitle-chart c-plomo-0 fsize-08">Total Ingresos</div>
+          <div [hidden]="hayGanancia" class="label-subtitle-chart c-aaa fsize-07">
+            Debe aumentar sus ingresos.
+          </div>
         </div>
 
         <div class="col-sm-4 text-center border-de-dotted">
@@ -23,25 +26,124 @@
               class="label-subtitle-chart c-aaa fsize-07">
               Los gastos representan el {{porcentejeGasto}}% de los ingresos.
           </div>
+          <div [hidden]="hayGanancia" class="label-subtitle-chart c-aaa fsize-07">
+            Mantenga los gastos al mínimo posible.
+          </div>
         </div>
 
         <div class="col-sm-4 text-center border-de-dotted">
-          <div class="label-title-chart">
-              <i *ngIf="hayGanancia" class="fas fa-arrow-up text-success"></i> {{totalGanancia}}</div>
+          <div class="label-title-chart" [ngClass]="{'text-danger': !hayGanancia}">                          
+            <span [hidden]="!hayGanancia"><i class="fas fa-arrow-up text-success"></i></span>
+            <span [hidden]="hayGanancia"><i class="fas fa-arrow-down text-danger"></i></span>            
+              {{totalGanancia}}
+          </div>
           <div class="label-subtitle-chart c-plomo-0 fsize-08">Total Ganancia</div>
           <div [hidden]="!hayGanancia" 
               class="label-subtitle-chart c-aaa fsize-07">La ganancia es el {{porcentejeGanancia}}% de los ingresos.
+          </div>
+          <div [hidden]="hayGanancia" class="label-subtitle-chart c-aaa fsize-07">
+            Aun no obtiene ganancias.<br>Vamos Mantén una actitud positiva.
           </div>
         </div>
 
         <div class="col-sm-12 text-center">
           <br>
           <div [hidden]="!hayGanancia" class="label-subtitle-chart c-aaa fsize-08">
-            El <strong>{{fechaPasoPuntoEq}}</strong>, se llego al punto de equilibrio, es decir se cubrio todos los gastos <strong>registrados</strong>.</div>
+            El <strong>{{fechaPasoPuntoEq}}</strong>, se llego al punto de equilibrio, es decir se cubrio todos los gastos <strong>registrados</strong>.
+          </div>
+          <div [hidden]="hayGanancia" class="label-subtitle-chart c-aaa fsize-08">
+            {{fraseMotivadora}}<br>Equipo Papaya.
+          </div>
         </div>        
       </div>
       <hr>
       <div id="chart_ingreso_egreso"></div>
     </div>
   </div>
+
+  <br>
+  <div class="row">
+    
+    <div class="col-md-4">
+      <div class="m-card">        
+        <div class="m-card-body text-center">
+          <div class="label-title-chart">{{totalOnlyIngresosVentas}}</div>
+          <div class="label-subtitle-chart c-plomo-0 fsize-08">Ventas Diaras</div>
+          <hr>
+          <div id="chart_only_ventas"></div>
+          <hr>
+          <button mat-flat-button>Ver detalles</button>
+        </div>        
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="m-card">
+        <div class="m-card-body text-center">
+          <div class="label-title-chart">{{totalOnlyOtrosIngresosVentas}}</div>
+          <div class="label-subtitle-chart c-plomo-0 fsize-08">Otros Ingresos</div>
+          <hr>
+          <div id="chart_only_ingresos_otros"></div>
+          <hr>
+          <button mat-flat-button>Ver detalles</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="m-card">
+        <div class="m-card-body text-center">
+          <div class="label-title-chart">{{totalOnlyOtrosGastosVariables}}</div>
+          <div class="label-subtitle-chart c-plomo-0 fsize-08">Gastos Variables</div>
+          <hr>
+          <div id="chart_only_gastos_variables"></div>
+          <hr>
+          <button mat-flat-button>Ver detalles</button>
+        </div>
+      </div>
+    </div>
+
+    <br>    
+  </div>  
+
+  <div class="row">
+
+    <div class="col-md-4">
+      <div class="m-card">
+        <div class="m-card-body text-center xCursor" matRipple matRippleColor="rgba(57,73,171,0.2)">
+          <img src="assets/images/002-budgeting.png" alt="">
+          <div class="label-subtitle-chart c-plomo-0 fsize-08">Gasto Fijos</div>
+          <div class="label-title-chart">{{totalOnlyGastosFijos}}</div>
+          <!-- <hr>
+          <button mat-flat-button>Ver detalles</button> -->
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="m-card">
+        <div class="m-card-body text-center xCursor" matRipple matRippleColor="rgba(57,73,171,0.2)">
+          <img src="assets/images/recursos_humanos.png" alt="">
+          <div class="label-subtitle-chart c-plomo-0 fsize-08">Recursos Humanos (Personal)</div>
+          <div class="label-title-chart">{{totalOnlyRRHH}}</div>
+          <!-- <hr>
+          <button mat-flat-button>Ver detalles</button> -->
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="m-card">
+        <div class="m-card-body text-center xCursor" matRipple matRippleColor="rgba(57,73,171,0.2)">
+          <img src="assets/images/lameta.png" alt="">
+          <div class="label-subtitle-chart c-plomo-0 fsize-08 pt-1">Revisa el cumplimiento de las metas y objetivos
+            propuestos.</div>                                
+        </div>
+      </div>
+    </div>
+
+
+  </div>
+
+  <br>
 </div>

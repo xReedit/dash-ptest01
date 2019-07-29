@@ -78,7 +78,7 @@ export class PlantillaGraficosService {
   }
 
   // multiples Label X (multiple data)
-  plantillaGraficoMultiLineYFalse(div: string, _type: string = 'area-spline', _format: string = '%a', _height: number = 125, _showLegend = false) {
+  plantillaGraficoMultiLineYFalse(div: string, _type: string = 'area-spline', _format: string = '%a', _height: number = 125, _showLegend = false, _showRotuloX = true, _showRotuloY = false) {
 
     return c3.generate({
       bindto: '#' + div,
@@ -95,10 +95,11 @@ export class PlantillaGraficosService {
           type: 'timeseries',
           tick: {
             format: _format
-          }
+          },
+          show: _showRotuloX
         },
         y: {
-          show: false
+          show: _showRotuloY
         }
       },
       legend: {

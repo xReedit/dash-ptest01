@@ -57,6 +57,9 @@ p, span, div {
 	font-family: Ubuntu-Regular;
 }
 
+.xCursor {
+  cursor: pointer;
+}
 /*[ FONT SIZE ]
 ///////////////////////////////////////////////////////////
 */

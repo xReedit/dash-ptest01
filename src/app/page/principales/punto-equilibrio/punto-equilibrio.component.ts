@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import * as d3 from 'd3';
 import * as cf from 'crossfilter2';
 
@@ -7,13 +7,17 @@ import { PlantillaGraficosService } from 'src/app/shared/services/plantilla-graf
 import { D3FormatLocalService } from 'src/app/shared/services/d3-format-local.service';
 import { ProgressLoadingService } from 'src/app/shared/services/progress-loading.service';
 import { UtilesService } from 'src/app/shared/services/utiles.service';
+import { Subscription } from 'rxjs/internal/Subscription';
+import { SelectFilterService } from 'src/app/shared/services/select-filter.service';
+import { SelectFiltroModel } from 'src/app/model/select-filtro.model';
+import { delay } from 'rxjs/internal/operators/delay';
 
 @Component({
   selector: 'app-punto-equilibrio',
   templateUrl: './punto-equilibrio.component.html'
   // styles: ['./punto-equilibrio.component.css']
 })
-export class PuntoEquilibrioComponent implements OnInit {
+export class PuntoEquilibrioComponent implements OnInit, OnDestroy {
   datos: any = [];
 
   // charts
@@ -48,6 +52,9 @@ export class PuntoEquilibrioComponent implements OnInit {
   dateFormat3 = d3.timeFormat('%Y-%m-%d'); // para label x graficos
   dateFormatNomDiaLargeDD = d3.timeFormat('%A %d');
 
+  private arrSelectFilter: Subscription = null;
+  arrFecha: SelectFiltroModel = new SelectFiltroModel();
+  mesYYTitulo = '';
   // arrFiltroSelect = {
   //   mm: 7,
   //   yy: 2019
@@ -60,27 +67,49 @@ export class PuntoEquilibrioComponent implements OnInit {
     public plantillaGraficos: PlantillaGraficosService,
     public d3FormatLocalService: D3FormatLocalService,
     private progressLoadingService: ProgressLoadingService,
-    private utilesService: UtilesService
+    private utilesService: UtilesService,
+    private selectFilterService: SelectFilterService
     ) { }
 
+  ngOnDestroy() {
+    this.arrSelectFilter.unsubscribe();
+  }
+
   ngOnInit() {
+
+    this.arrSelectFilter = this.selectFilterService.arrFilterSelect$
+    .pipe(delay(100))
+    .subscribe((res) => {
+      this.arrFecha = res;
+      this.mesYYTitulo = this.arrFecha.mes.descripcion + ' ' + this.arrFecha.yy[0];
+      // console.log(res);
+      this.xInitLoadGraficos();
+    });
+
+  }
+
+  xInitLoadGraficos() {
     this.progressLoadingService.setLoading(true);
 
-    const arrFecha = {
-      f1: '2019-07-01',
-      f2: '2019-07-31'
-    };
+    // const arrFecha = {
+    //   f1: '2019-07-01',
+    //   f2: '2019-07-31'
+    // };
 
-    this.crudService.postFree(arrFecha, 'estadistica', 'getIngresosGastos')
-        .subscribe((res: any) => {
-          if (!res.success) { console.log(res); return; }
+    this.crudService.postFree(this.arrFecha.mes, 'estadistica', 'getIngresosGastos')
+      .subscribe((res: any) => {
+        if (!res.success) { console.log(res); return; }
 
-          console.log(res);
-          this.datos = res.data[0][0];
+        // console.log(res);
+        this.datos = res.data[0][0];
+        if (!this.datos.ventas_gastos_v) {
+          this.progressLoadingService.setLoading(false);
+          return;
+        }
 
-          this.xAsignarPlantillaGraficos();
-          this.xGetFechaActual();
-        });
+        this.xAsignarPlantillaGraficos();
+        this.xGetFechaActual();
+      });
   }
 
   xGetFechaActual() {
@@ -189,7 +218,9 @@ export class PuntoEquilibrioComponent implements OnInit {
     });
 
     // cacular gastos totales = gf + gv
-    const impGastoTotal = impSumEgreso + this.datos.gastos_fijos[0].importe + this.datos.rrhh[0].importe;
+    const importe_gastos_fijos = this.datos.gastos_fijos ? this.datos.gastos_fijos[0].importe : 0;
+    const importe_rrhh = this.datos.rrhh ? this.datos.rrhh[0].importe : 0;
+    const impGastoTotal = impSumEgreso + importe_gastos_fijos + importe_rrhh;
     const fechaPuntoEquilibrio = mes_seleccionado.filter((x: any) => x.value.impSumIngreso > impGastoTotal).map((x: any) => x.value.f )[0];
     // const fechaPuntoEquilibrio = aa[0];
     // console.log(fechaPuntoEquilibrio);
@@ -250,8 +281,8 @@ export class PuntoEquilibrioComponent implements OnInit {
     });
 
     // totalgastos fijos
-    this.totalOnlyGastosFijos = this.format_money(this.datos.gastos_fijos[0].importe);
-    this.totalOnlyRRHH = this.format_money(this.datos.rrhh[0].importe);
+    this.totalOnlyGastosFijos = this.format_money(importe_gastos_fijos);
+    this.totalOnlyRRHH = this.format_money(importe_rrhh);
 
     this.progressLoadingService.setLoading(false);
   }

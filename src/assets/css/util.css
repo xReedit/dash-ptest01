@@ -279,6 +279,16 @@ p, span, div {
 .op-0-9 {opacity: 0.9;}
 .op-1-0 {opacity: 1;}
 
+/* with */
+.img-w-100 {
+  width: 100%;
+  height: auto;
+}
+
+.alto-vh-83 {
+	height: 83vh;
+}
+
 /*DISABLED DIV AND CHILDS*/
 .d-disabled {
 	pointer-events: none;
@@ -307,4 +317,15 @@ p, span, div {
 .c3-xgrid-line.lineGreen text {
   fill: #388e3c;
   font-weight: 600;
+}
+
+/*MEDIA SCREEN*/
+/*MEDIA SCREEN*/
+.hidden-mobile {
+  display: block;
+}
+@media screen and (max-width: 768px) {
+	.hidden-mobile {
+	  display: none;
+	}
 }

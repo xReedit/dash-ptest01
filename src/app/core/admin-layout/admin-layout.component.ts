@@ -19,6 +19,7 @@ export class AdminLayoutComponent implements OnInit, OnDestroy {
   private isProgreesBar: Subscription = null;
 
   @ViewChild('drawer') drawer: MatDrawer;
+  @ViewChild('drawerFilter') drawerFilter: MatDrawer;
 
   @ViewChild('container') container: HTMLElement;
 
@@ -48,6 +49,10 @@ export class AdminLayoutComponent implements OnInit, OnDestroy {
     this.drawer.toggle();
   }
 
+  toggleDrawerFilter() {
+    this.drawerFilter.toggle();
+  }
+
   private meSizeScreen(): void {
     this.isScreenAll = false;
     this.mode = 'over';
@@ -58,6 +63,10 @@ export class AdminLayoutComponent implements OnInit, OnDestroy {
     this.isScreenAll = true;
     this.mode = 'side';
     this.drawer.open();
+  }
+
+  showDrawerScreen() {
+    if (!this.isScreenAll) { this.drawer.close(); }
   }
 
   @HostListener('window:resize', ['$event'])

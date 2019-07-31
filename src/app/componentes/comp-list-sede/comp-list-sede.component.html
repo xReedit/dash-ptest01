@@ -1,0 +1,9 @@
+<mat-form-field class="w-100">
+  <mat-select [(value)]="selected" placeholder="Sede"
+      [compareWith]="compareObjects"
+      (selectionChange)="_onSelectionChange($event)">
+    <mat-option *ngFor="let item of listSede" [value]="item">
+      {{item.nombre | uppercase}}
+    </mat-option>
+  </mat-select>
+</mat-form-field>

@@ -41,6 +41,10 @@ ard chart */
         text-align: left;
 }
 
+.m-card.conBorde {
+    border: #e0e0e0 solid 1px;
+}
+
 .m-card-toolbar {
         color: #2a2a2a;
         font-weight: 400;
@@ -132,4 +136,14 @@ table .table_sm {
 
 .table_sm tbody tr td {
   font-size: 0.7em;
+}
+
+.num-version {
+    font-size: 9px;
+    position: fixed;
+    background: #0d47a1;
+    border-radius: 10px;
+    line-height: 11px;
+    padding: 4px;
+    color: white;
 }

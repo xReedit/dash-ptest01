@@ -6,6 +6,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { PrincipalesRoutingModule } from './principales.routing';
 import { MainComponent } from './main/main.component';
 import { PuntoEquilibrioComponent } from './punto-equilibrio/punto-equilibrio.component';
+import { InicioComponent } from './inicio/inicio.component';
 
 @NgModule({
   imports: [
@@ -16,7 +17,8 @@ import { PuntoEquilibrioComponent } from './punto-equilibrio/punto-equilibrio.co
   ],
   declarations: [
     MainComponent,
-    PuntoEquilibrioComponent
+    PuntoEquilibrioComponent,
+    InicioComponent
   ]
 })
 export class PrincipalesModule { }

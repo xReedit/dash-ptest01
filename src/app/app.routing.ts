@@ -23,12 +23,12 @@ export const AppRoutes: Routes = [
           loadChildren: './page/principales/principales.module#PrincipalesModule',
           data: { 'tituloModulo': 'Principales:' }
         },
-        // {
-        //   // path: 'ventas',
-        //   path: 'dashboard', // por los momentos
-        //   loadChildren: './page/ventas/ventas.module#VentasModule',
-        //   data: { 'tituloModulo': 'Ventas:'  }
-        // },
+        {
+          // path: 'ventas',
+          path: 'ventas', // por los momentos
+          loadChildren: './page/ventas/ventas.module#VentasModule',
+          data: { 'tituloModulo': 'Ventas:'  }
+        },
         {
           path: 'configuraciones', // por los momentos
           loadChildren: './page/configuraciones/configuraciones.module#ConfiguracionesModule',

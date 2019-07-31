@@ -1,5 +1,6 @@
-import { Component, OnInit, ElementRef } from '@angular/core';
+import { Component, OnInit, ElementRef, HostListener, ViewChild, EventEmitter, Output } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
+import { MatDrawer } from '@angular/material';
 
 @Component({
   selector: 'app-siderbar',
@@ -7,6 +8,8 @@ import { Router, ActivatedRoute } from '@angular/router';
   styleUrls: ['./siderbar.component.css']
 })
 export class SiderbarComponent implements OnInit {
+
+  @Output('clickItemMenu') clickItemMenu: EventEmitter<boolean> = new EventEmitter(false);
 
   constructor(public router: Router, route: ActivatedRoute) { }
 
@@ -20,5 +23,10 @@ export class SiderbarComponent implements OnInit {
   irVentasClientes() {
     this.router.navigate(['/clientes-consumo']);
   }
+
+  showClick() {
+    this.clickItemMenu.emit(true);
+  }
+
 
 }

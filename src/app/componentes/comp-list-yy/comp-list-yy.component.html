@@ -1,0 +1,8 @@
+<mat-form-field class="w-100">
+  <mat-select [(value)]="selected" placeholder="Año" [compareWith]="compareObjects"
+    (selectionChange)="_onSelectionChange($event)">
+    <mat-option *ngFor="let item of list" [value]="item">
+      {{item}}
+    </mat-option>
+  </mat-select>
+</mat-form-field>

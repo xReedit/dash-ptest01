@@ -11,14 +11,14 @@
         <hr>
         <mat-nav-list class="list-unstyled components">
             <div class="item">
-                <mat-list-item [routerLink]="[ '/dashboard']">
+                <mat-list-item [routerLink]="['/principales']" (click)="showClick()">
                     <a>
                         <i class="fas fa-home"></i>
                         Incio
                     </a>                        
                 </mat-list-item>
             </div>
-            <div class="item">
+            <!-- <div class="item">
                 <mat-list-item href="#pageSubmenu" data-toggle="collapse" aria-expanded="false">
                         <a  href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
                             <i class="fas fa-copy"></i>
@@ -42,25 +42,25 @@
                           <a>Comparativa</a>
                         </mat-list-item>
                 </mat-list>      
-            </div>        
+            </div>         -->
             <div class="item">
-                <mat-list-item>
-                    <a href="#">
+                <mat-list-item [routerLink]="[ '/principales/punto-equilibrio']" (click)="showClick()">
+                    <a>
                         <i class="fas fa-image"></i>
-                        Compras
+                        Punto de Equilibrio
                     </a>
                 </mat-list-item>
             </div>
             <div class="item">
-                <mat-list-item>
-                    <a href="#">
+                <mat-list-item [routerLink]="[ '/ventas']" (click)="showClick()">
+                    <a>
                         <i class="fas fa-question"></i>
-                        Gastos
+                        Indicadores de Ventas
                     </a>
                 </mat-list-item>
             </div>   
             <div class="item">
-              <mat-list-item [routerLink]="[ '/configuraciones']">
+              <mat-list-item [routerLink]="[ '/configuraciones']" (click)="showClick()">
                 <a>
                   <i class="fas fa-question"></i>
                   Establecer metas

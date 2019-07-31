@@ -1,0 +1,21 @@
+<div class="content">
+  <div class="m-3">
+    <h4>Filtro</h4>
+  </div>
+<hr>
+<div class="m-3">  
+  <app-comp-list-sede (getObject)="_getObjectSede($event)"></app-comp-list-sede>
+</div>
+<hr>
+<div class="m-3">
+  <app-comp-list-yy (getObject)="_getObjectYY($event)"></app-comp-list-yy>
+</div>
+<hr>
+<div class="m-3">
+  <app-comp-select-mes-dia yy="2019" (getObject)="_getObjectMesDia($event)"></app-comp-select-mes-dia>
+</div>
+<hr>
+<div class="m-3 text-center">
+  <button mat-flat-button (click)="showDrawerFilter()">Listo, Cerrar</button>
+</div>
+</div>

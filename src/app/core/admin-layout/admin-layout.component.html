@@ -1,12 +1,19 @@
 
 <mat-drawer-container class="example-container animated fadeIn" autosize>
-    <mat-drawer #drawer class="example-sidenav" [mode]="mode">        
-        <app-siderbar></app-siderbar>        
+    <mat-drawer #drawer class="example-sidenav" [mode]="mode" position="start">
+        <app-siderbar (clickItemMenu)="showDrawerScreen()"></app-siderbar>
     </mat-drawer>
-
-    <mat-drawer-content>         
+    <mat-drawer #drawerFilter mode="over" position="end">
+      <app-select-filter (_showDrawerFilter)="toggleDrawerFilter()"></app-select-filter>
+    </mat-drawer>
+    <!-- <mat-sidenav position="start">Start 2</mat-sidenav> -->
+    
+    <mat-drawer-content>
     <div class="example-sidenav-content">
-        <app-header-tollbar (_click_btn_bar)="showDrawer()"></app-header-tollbar>
+        <app-header-tollbar 
+            (_click_btn_bar)="showDrawer()"
+            (_showDrawerFilter)="toggleDrawerFilter()"
+        ></app-header-tollbar>        
         <!-- *ngIf="progressLoadingService.isSeeProgress$ | async" -->
         <mat-progress-bar            
             [hidden]="!isLoading"
@@ -15,7 +22,7 @@
         <div class="contenedor-master"
             [ngClass]="{'d-disabled': isLoading, 'animated fadeIn': !isLoading}"
             #container id="container">
-            <div class="contenedor-principal">                  
+            <div class="contenedor-principal">                
                 <!-- <h1>principal</h1> -->
                 <router-outlet></router-outlet>
             </div>

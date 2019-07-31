@@ -2,14 +2,21 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
 import { MainComponent } from './main/main.component';
+import { InicioComponent } from './inicio/inicio.component';
 import { PuntoEquilibrioComponent } from './punto-equilibrio/punto-equilibrio.component';
+
 
 const routes: Routes = [{
 	path: '', component: MainComponent,
 	data: { titulo: 'Principales' },
 	children: [
 		{
-			path: '', redirectTo: 'punto-equilibrio'
+			path: '', redirectTo: 'inicio'
+		},
+		{
+			path: 'inicio',
+			component: InicioComponent,
+			data: { titulo: 'Inicio' }
 		},
 		{
 			path: 'punto-equilibrio',

@@ -10,6 +10,7 @@ import { Router } from '@angular/router';
 })
 export class HeaderTollbarComponent implements OnInit {
   @Output('_click_btn_bar') _click_btn_bar: EventEmitter<boolean> = new EventEmitter(false);
+  @Output('_showDrawerFilter') _showDrawerFilter: EventEmitter<boolean> = new EventEmitter(false);
   constructor(private authService: AuthService, private router: Router) { }
 
   ngOnInit() {
@@ -17,6 +18,10 @@ export class HeaderTollbarComponent implements OnInit {
 
   showDrawer() {
     this._click_btn_bar.emit(true);
+  }
+
+  showDrawerFilter() {
+    this._showDrawerFilter.emit(true);
   }
 
   exitProgram() {

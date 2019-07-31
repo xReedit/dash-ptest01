@@ -1,0 +1,15 @@
+<mat-tab-group>
+  <mat-tab label="Meses">
+     <mat-form-field class="w-100">
+       <mat-select [(value)]="selected_mes" [compareWith]="compareObjects"
+         (selectionChange)="_onSelectionChange($event)">
+         <mat-option *ngFor="let item of list_mes" [value]="item">
+           {{item.descripcion}}
+         </mat-option>
+       </mat-select>
+     </mat-form-field>
+  </mat-tab>
+  <mat-tab label="Desde Hasta">
+
+  </mat-tab>  
+</mat-tab-group>
